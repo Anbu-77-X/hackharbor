@@ -176,6 +176,9 @@ come after everything newer, in value order among themselves.
   word, a plural, a category or topic name, or a word that's only in the video's tags or subject
   terms. Videos matching more of the query come first, then closer matches and more valuable
   videos. An exact word always beats a near miss.
+- **Playlist search** works the same way, on the Playlists page and above video results. A
+  playlist is found by its name, its channel, and what its videos are about, so
+  "kerberoasting" finds an Active Directory series whose name doesn't say it.
 - **Playlists**: creator playlists first, ordered by the average score of their ten best videos
   (videos inside keep the creator's order), then New this week, Hidden gems and Best of each
   topic. Older videos in a trusted creator's playlist need a score of 7.5 and aren't held to the

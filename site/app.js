@@ -20,6 +20,7 @@
     settings: "M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4",
     filters: "M4 7h16M7 12h10M10 17h4",
     menu: "M4 6h16M4 12h16M4 18h16",
+    search: "M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zM15.2 15.2 20 20",
     hash: "M9.5 4 7.5 20M16.5 4l-2 16M4.5 9h15.5M4 15h15.5",
     save: "M4 6h12M4 11h12M4 16h8M18 13v7M14.5 16.5h7",
     external: "M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5",
@@ -112,7 +113,13 @@
     });
     VIDEOS.forEach(function (v) { BY_ID[v.id] = v; });
     HOME = (feed.home || []).filter(function (id) { return BY_ID[id]; });
-    PLAYLISTS = feed.playlists || [];
+    PLAYLISTS = (Array.isArray(feed.playlists) ? feed.playlists : []).filter(function (p) {
+      return p && typeof p.key === "string" && typeof p.name === "string" && Array.isArray(p.ids);
+    }).map(function (p) {
+      return { key: p.key.slice(0, 80), name: p.name.slice(0, 160), by: str(p.by, 120), kind: p.kind === "creator" ? "creator" : "auto",
+               yt: typeof p.yt === "string" && /^[A-Za-z0-9_-]{10,64}$/.test(p.yt) ? p.yt : null, score: num(p.score), ids: p.ids.filter(isId) };
+    });
+    PX = null;
     GENERATED = index.generated || feed.generated;
     SAMPLE = !!index.sample;
   }
@@ -190,6 +197,7 @@
     store.saved = next;
   }
   function saveStore() {
+    PX = null;
     keepSnapshots();
     try { localStorage.setItem("harbor", JSON.stringify(store)); } catch (e) { /* private window */ }
   }
@@ -207,7 +215,7 @@
 
   const state = {
     view: "home", arg: null, query: "", cat: null, sub: null,
-    showFilters: false, filters: { date: "any", len: "any", kind: "any", sort: "rank" },
+    plq: "", showFilters: false, filters: { date: "any", len: "any", kind: "any", sort: "rank" },
     context: null
   };
 
@@ -326,7 +334,7 @@
       const current = state.view === n[0] || (n[0] === "playlists" && state.view === "playlist") || (n[0] === "categories" && ["recent", "gems", "all"].indexOf(state.view) >= 0);
       list.appendChild(h("button", {
         class: "nav-item", type: "button", title: n[1], "aria-current": current ? "page" : null,
-        onclick: function () { state.cat = null; state.sub = null; go(n[0]); }
+        onclick: function () { state.cat = null; state.sub = null; state.plq = ""; go(n[0]); }
       }, icon(n[0], "sm"), h("span", { class: "lbl", text: n[1] })));
     });
     const extra = h("div", { class: "side-extra" }, h("hr"), h("div", { class: "side-label", text: "Explore" }));
@@ -650,6 +658,71 @@
     out.sort(function (a, b) { return b[1] - a[1] || b[2] - a[2]; });
     return out.map(function (x) { return x[0]; });
   }
+  /* Playlists are searched the same way as videos (typos, half words, plurals, closest match
+     first). A playlist is found by its name, its channel, and what its videos are about, so
+     "kerberoasting" finds an Active Directory series even if its name doesn't say it. */
+  let PX = null;
+  function allPlaylists() {
+    return PLAYLISTS.filter(function (p) { return p.ids.some(function (id) { return BY_ID[id]; }); })
+      .concat(store.playlists.map(function (p) { return { key: p.key, name: p.name, by: "Yours", kind: "mine", ids: p.ids, score: 0 }; }));
+  }
+  function buildPlaylistSearch() {
+    const items = allPlaylists();
+    const vocab = new Map();
+    function add(tok, i, w) {
+      if (tok.length < 2) return;
+      let m = vocab.get(tok);
+      if (!m) { m = new Map(); vocab.set(tok, m); }
+      if ((m.get(i) || 0) < w) m.set(i, w);
+    }
+    items.forEach(function (pl, i) {
+      toks(pl.name).forEach(function (t) { add(t, i, 3); });
+      toks(pl.by).forEach(function (t) { add(t, i, 2.5); });
+      let value = 0, n = 0;
+      pl.ids.slice(0, 80).forEach(function (id) {
+        const v = known(id);
+        if (!v) return;
+        value += v.p; n++;
+        toks(v.title).forEach(function (t) { add(t, i, 0.7); });
+        v.subs.forEach(function (x) { toks(SUB_NAME[x]).forEach(function (t) { add(t, i, 0.9); }); });
+        v.cats.forEach(function (x) { toks(CATS[x]).forEach(function (t) { add(t, i, 0.6); }); });
+      });
+      pl._value = pl.score || (n ? value / n : 0);
+      pl._name = norm(pl.name);
+    });
+    PX = { items: items, vocab: vocab, keys: Array.from(vocab.keys()) };
+  }
+  function searchPlaylists(query) {
+    if (!PX) buildPlaylistSearch();
+    let qt = toks(query);
+    const meaningful = qt.filter(function (t) { return !STOPWORDS.has(t) && t !== "playlist" && t !== "playlists"; });
+    if (meaningful.length) qt = meaningful;
+    if (!qt.length) return [];
+    const acc = new Map();
+    qt.forEach(function (q) {
+      const best = new Map();
+      for (let k = 0; k < PX.keys.length; k++) {
+        const sim = similar(q, PX.keys[k]);
+        if (sim) PX.vocab.get(PX.keys[k]).forEach(function (w, i) { const sc = sim * sim * w; if ((best.get(i) || 0) < sc) best.set(i, sc); });
+      }
+      best.forEach(function (sc, i) { const e = acc.get(i) || { sum: 0, n: 0 }; e.sum += sc; e.n++; acc.set(i, e); });
+    });
+    const n = qt.length, need = n <= 2 ? 1 : Math.ceil(n * 0.6), phrase = qt.join(" ");
+    const out = [];
+    acc.forEach(function (e, i) {
+      if (e.n < need) return;
+      const pl = PX.items[i];
+      let rel = (e.sum / n) * (e.n / n);
+      if (pl._name.indexOf(phrase) >= 0) rel += 2;
+      out.push([pl, e.n, rel + 0.12 * pl._value]);
+    });
+    out.sort(function (a, b) { return b[1] - a[1] || b[2] - a[2]; });
+    // When enough playlists match every word, partial matches are just noise.
+    const full = out.filter(function (x) { return x[1] === n; });
+    return (n > 1 && full.length >= 3 ? full : out).map(function (x) { return x[0]; });
+  }
+  function ownerOf(pl) { return pl.kind === "creator" ? pl.by : pl.kind === "mine" ? "Private" : "Updated automatically"; }
+
   function viewSearch(main) {
     const found = searchVideos(state.query);
     const title = "Results for “" + state.query + "”";
@@ -659,6 +732,15 @@
       return;
     }
     filteredView(main, title, found);
+    const pls = searchPlaylists(state.query);
+    if (pls.length) {
+      const strip = h("section", { class: "pl-strip", "aria-label": "Matching playlists" },
+        h("div", { class: "pl-strip-head" }, h("h2", { class: "sec-title", text: "Playlists" }),
+          pls.length > 4 ? h("button", { class: "ghost-btn", type: "button", onclick: function () { state.plq = state.query; go("playlists"); } }, "See all " + pls.length) : null),
+        (function () { const g = h("div", { class: "grid" }); pls.slice(0, 4).forEach(function (pl) { g.appendChild(playlistCard(pl, ownerOf(pl))); }); return g; })());
+      const headEl = main.querySelector(".page-head");
+      if (headEl) headEl.after(strip); else main.prepend(strip);
+    }
   }
   function viewSaved(main, key, title, iconName, emptyText) {
     const list = store[key].map(known).filter(Boolean);
@@ -726,30 +808,55 @@
   }
   function viewPlaylists(main) {
     main.appendChild(head("Playlists", null));
+    const input = h("input", { type: "search", class: "pl-search-input", placeholder: "Search playlists", "aria-label": "Search playlists", autocomplete: "off", maxlength: "100" });
+    input.value = state.plq || "";
+    const body = h("div", { class: "pl-body" });
+    let timer = null;
+    input.addEventListener("input", function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        state.plq = input.value.trim();
+        history.replaceState(null, "", hashFor());
+        fillPlaylists(body);
+      }, 160);
+    });
+    main.appendChild(h("form", { class: "pl-search", role: "search", onsubmit: function (e) { e.preventDefault(); } }, icon("search", "sm"), input));
+    main.appendChild(body);
+    fillPlaylists(body);
+  }
+  function fillPlaylists(body) {
+    body.replaceChildren();
+    if (state.plq) {
+      const found = searchPlaylists(state.plq);
+      body.appendChild(h("p", { class: "pl-count", text: plural(found.length, "playlist") }));
+      if (!found.length) { body.appendChild(emptyState("playlists", "No playlist close to that. Try a channel name, a box series, or a topic like Active Directory.")); return; }
+      body.appendChild(progressive(h("div", { class: "grid" }), found, function (pl) { return playlistCard(pl, ownerOf(pl)); }));
+      return;
+    }
     const live = PLAYLISTS.filter(function (p) { return p.ids.some(function (id) { return BY_ID[id]; }); });
     const creators = live.filter(function (p) { return p.kind === "creator"; });
     const auto = live.filter(function (p) { return p.kind !== "creator"; });
     if (creators.length) {
-      main.appendChild(h("h2", { class: "sec-title", text: "From creators" }));
+      body.appendChild(h("h2", { class: "sec-title", text: "From creators" }));
       const g0 = h("div", { class: "grid" });
       creators.forEach(function (pl) { g0.appendChild(playlistCard(pl, pl.by)); });
-      main.appendChild(g0);
+      body.appendChild(g0);
     }
-    main.appendChild(h("h2", { class: "sec-title", text: "From HackHarbor" }));
+    body.appendChild(h("h2", { class: "sec-title", text: "From HackHarbor" }));
     if (auto.length) {
       const g1 = h("div", { class: "grid" });
       auto.forEach(function (pl) { g1.appendChild(playlistCard(pl, "Updated automatically")); });
-      main.appendChild(g1);
+      body.appendChild(g1);
     } else {
-      main.appendChild(emptyState("playlists", "Playlists appear here once a topic has enough strong videos."));
+      body.appendChild(emptyState("playlists", "Playlists appear here once a topic has enough strong videos."));
     }
-    main.appendChild(h("h2", { class: "sec-title", text: "Yours" }));
+    body.appendChild(h("h2", { class: "sec-title", text: "Yours" }));
     if (!store.playlists.length) {
-      main.appendChild(emptyState("save", "Make a playlist from Save under any video. Playlists stay in this browser."));
+      body.appendChild(emptyState("save", "Make a playlist from Save under any video. Playlists stay in this browser."));
     } else {
       const g2 = h("div", { class: "grid" });
       store.playlists.forEach(function (pl) { g2.appendChild(playlistCard(pl, "Private")); });
-      main.appendChild(g2);
+      body.appendChild(g2);
     }
   }
   function findPlaylist(key) {
@@ -985,6 +1092,7 @@
     else if (state.view === "search" && state.query) parts.push(state.query);
     let hsh = "#/" + parts.map(encodeURIComponent).join("/");
     if (state.cat) hsh += "?cat=" + encodeURIComponent(state.cat) + (state.sub ? "&topic=" + encodeURIComponent(state.sub) : "");
+    else if (state.view === "playlists" && state.plq) hsh += "?q=" + encodeURIComponent(state.plq);
     return hsh === "#/home" ? "#/" : hsh;
   }
   function readHash() {
@@ -1001,6 +1109,7 @@
     state.cat = cat && CATS[cat] ? cat : null;
     const sub = params.get("topic");
     state.sub = state.cat && sub && SUB_OF[sub] === state.cat ? sub : null;
+    state.plq = state.view === "playlists" ? (params.get("q") || "").slice(0, 100) : "";
   }
   const VIEWS = ["home", "longs", "liked", "history", "later", "categories", "recent", "gems", "all", "channel", "playlists", "playlist", "settings", "about", "search", "watch"];
   function go(view, arg) {

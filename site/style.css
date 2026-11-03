@@ -908,3 +908,16 @@ html.drawer-open, html.drawer-open body { overflow: hidden; }
   .tb-right { gap: 2px; }
 }
 .w-main, .w-next { min-width: 0; }
+
+/* Playlist search: a box on the Playlists page, and matching playlists above video results. */
+.pl-search { display: flex; align-items: center; gap: 10px; max-width: 560px; height: 44px; margin: -4px 0 22px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: 999px; background: #0b1430; }
+.pl-search:focus-within { border-color: var(--lav); }
+.pl-search svg { width: 20px; height: 20px; color: var(--haze); }
+.pl-search-input { flex: 1 1 auto; min-width: 0; height: 100%; border: 0; outline: none; background: none; color: var(--bright); font: inherit; font-size: 0.95rem; }
+.pl-search-input::placeholder { color: var(--haze); }
+.pl-search-input::-webkit-search-cancel-button { filter: invert(0.7); }
+.pl-count { margin: 0 0 14px; color: var(--haze); font-size: 0.9rem; }
+.pl-strip { margin: 0 0 30px; }
+.pl-strip-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.pl-strip-head .sec-title { margin: 0; }
+.pl-strip-head .ghost-btn { height: 32px; }
