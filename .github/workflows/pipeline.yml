@@ -2,7 +2,11 @@ name: pipeline
 
 on:
   schedule:
-    - cron: "17 */2 * * *"   # every two hours, at :17 to stay clear of the top-of-the-hour rush
+    # GitHub runs schedules on a best-effort basis and silently skips some, so this asks for a
+    # run every hour (at :17 and :47, clear of the top-of-the-hour rush); the pipeline spreads the
+    # day's quota over however many runs actually happen.
+    - cron: "17 * * * *"
+    - cron: "47 * * * *"
   workflow_dispatch:
 
 # Nothing by default; each job asks only for what it needs.

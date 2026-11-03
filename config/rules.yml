@@ -1,7 +1,7 @@
 # The numbers the pipeline decides with. Defaults are tuned to keep only
 # strong videos; lower a threshold to let more in.
 
-run_every_hours: 2
+run_every_hours: 1                 # runs are asked for twice an hour, and GitHub skips some; used to split the daily quota
 
 languages: [en, ar]
 min_duration_seconds: 240        # shorter videos (and every Short) are dropped

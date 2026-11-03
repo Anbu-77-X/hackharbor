@@ -891,7 +891,7 @@
     const updated = GENERATED ? "Updated " + agoFromMs(new Date(GENERATED).getTime()) + " · " + plural(VIDEOS.length, "video") : "";
     main.appendChild(h("div", { class: "about" },
       h("p", { text: "Hand-picked security videos. No shorts, no noise." }),
-      h("p", { text: "Every two hours a pipeline checks hundreds of YouTube channels, plus Hacker News, Reddit, Lobsters and Mastodon, for new videos and the ones people are talking about. It keeps only those worth a practitioner's time: new videos once they've proven themselves, and older ones only when what they teach still holds." }),
+      h("p", { text: "Many times a day a pipeline checks hundreds of YouTube channels, plus Hacker News, Reddit, Lobsters and Mastodon, for new videos and the ones people are talking about. It keeps only those worth a practitioner's time: new videos once they've proven themselves, and older ones only when what they teach still holds." }),
       h("p", { text: "There's no sign-in. Liked videos, history, watch later and playlists stay in your browser." }),
       updated ? h("p", { class: "stat", text: updated }) : null));
   }
