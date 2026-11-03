@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HackHarbor</string>
+    <string name="launch_url">https://harbor.adel-sadek.net/</string>
+    <!-- The site vouches for this app in /.well-known/assetlinks.json, so Chrome shows it without an address bar. -->
+    <string name="asset_statements" translatable="false">[{\"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://harbor.adel-sadek.net\"}}]</string>
+</resources>

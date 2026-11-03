@@ -1,0 +1,50 @@
+// HackHarbor for Android: a Trusted Web Activity that opens https://harbor.adel-sadek.net
+// full screen in Chrome (or a WebView if Chrome isn't installed). The site does all the work,
+// so the app rarely needs a new build.
+plugins {
+    id "com.android.application"
+}
+
+def keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
+def keystorePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+
+android {
+    namespace "net.adelsadek.harbor"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "net.adelsadek.harbor"
+        minSdk 21
+        targetSdk 35
+        versionCode((System.getenv("VERSION_CODE") ?: "1").toInteger())
+        versionName "1.0." + (System.getenv("VERSION_CODE") ?: "0")
+    }
+
+    signingConfigs {
+        release {
+            // The key lives only in the repository's Actions secrets.
+            if (keystorePath) {
+                storeFile file(keystorePath)
+                storePassword keystorePassword
+                keyAlias "hackharbor"
+                keyPassword keystorePassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig keystorePath ? signingConfigs.release : null
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation "com.google.androidbrowserhelper:androidbrowserhelper:2.5.0"
+}

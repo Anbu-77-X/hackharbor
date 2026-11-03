@@ -1,0 +1,76 @@
+name: android
+
+# Builds HackHarbor for Android and publishes the APK to the "android" release:
+# (the Releases page of this repository).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["android/**", ".github/workflows/android.yml"]
+
+permissions: {}
+
+concurrency:
+  group: android
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write   # publish the APK to the release
+    env:
+      # The app's signing certificate; must match site/.well-known/assetlinks.json.
+      EXPECTED_SHA256: "EC:4B:1B:07:14:EF:FD:8C:D5:E2:79:DE:D4:86:6B:57:81:6C:80:22:B3:05:6D:DB:E5:CF:F7:B7:E1:F5:53:90"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3  # v4.9.1
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build
+        env:
+          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          VERSION_CODE: ${{ github.run_number }}
+        run: |
+          cd android
+          if [ -z "$ANDROID_KEYSTORE_B64" ] || [ -z "$ANDROID_KEYSTORE_PASSWORD" ]; then
+            echo "::warning::The signing key isn't in this repository's secrets yet, so this run only checks that the app builds. Add ANDROID_KEYSTORE_B64 and ANDROID_KEYSTORE_PASSWORD to publish a signed APK."
+            ./gradlew --no-daemon -q assembleDebug
+            exit 0
+          fi
+          KEY="$RUNNER_TEMP/hackharbor.jks"
+          printf '%s' "$ANDROID_KEYSTORE_B64" | base64 -d > "$KEY"
+          ANDROID_KEYSTORE_PATH="$KEY" ./gradlew --no-daemon -q assembleRelease
+          rm -f "$KEY"
+
+      - name: Check the signature matches the site
+        id: check
+        run: |
+          APK=android/app/build/outputs/apk/release/app-release.apk
+          [ -f "$APK" ] || { echo "signed=false" >> "$GITHUB_OUTPUT"; exit 0; }
+          SIGNER="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner"
+          GOT="$("$SIGNER" verify --print-certs "$APK" | grep -i 'SHA-256 digest' | head -1 | awk '{print $NF}' | tr 'a-f' 'A-F' | sed 's/../&:/g; s/:$//')"
+          if [ "$GOT" != "$EXPECTED_SHA256" ]; then
+            echo "::error::The APK is signed with $GOT, but the site vouches for $EXPECTED_SHA256."
+            exit 1
+          fi
+          cp "$APK" HackHarbor.apk
+          echo "signed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Publish to the release
+        if: steps.check.outputs.signed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view android --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create android --repo "$GITHUB_REPOSITORY" --title "HackHarbor for Android" \
+              --notes "Download **HackHarbor.apk** below and open it on your phone. If Android asks, allow installing apps from your browser or Files app. The app opens the site full screen, so new videos show up without updating it."
+          fi
+          gh release upload android HackHarbor.apk --clobber --repo "$GITHUB_REPOSITORY"

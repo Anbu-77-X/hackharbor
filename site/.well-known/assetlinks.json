@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "net.adelsadek.harbor",
+      "sha256_cert_fingerprints": ["EC:4B:1B:07:14:EF:FD:8C:D5:E2:79:DE:D4:86:6B:57:81:6C:80:22:B3:05:6D:DB:E5:CF:F7:B7:E1:F5:53:90"]
+    }
+  }
+]
