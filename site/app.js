@@ -1049,6 +1049,7 @@
     // screen from inside the page, but they will for the page's own player box. Where even that
     // isn't available, the player fills the window instead, with a button to come back.
     // Full screen also starts the video if it isn't playing yet.
+    if (player.querySelector("iframe")) autostart(player.querySelector("iframe"));
     const fullBtn = actButton("expand", "Full screen", null, function () {
       enterFull(player);
       playIn(player.querySelector("iframe"));
@@ -1134,11 +1135,37 @@
   }
   function refresh() { history.replaceState(null, "", hashFor()); render(); }
   window.addEventListener("popstate", function () { readHash(); closeDrawer(); render(); });
-  function playIn(frame) {
+  const YT_ORIGIN = "https://www.youtube-nocookie.com";
+  function ytSend(frame, func) {
     if (!frame || !frame.contentWindow) return;
-    try {
-      frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: "playVideo", args: [] }), "https://www.youtube-nocookie.com");
-    } catch (e) { /* the player isn't ready yet; YouTube's own play button still works */ }
+    try { frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: func, args: [] }), YT_ORIGIN); } catch (e) { /* not ready */ }
+  }
+  function playIn(frame) {
+    ytSend(frame, "unMute");   // a tap on Full screen counts as the user's say-so for sound
+    ytSend(frame, "playVideo");
+  }
+  /* The video starts by itself when its page opens. Browsers (TVs especially) often refuse to
+     start a video with sound on their own, so if it isn't playing shortly after the player loads,
+     it starts muted, which every browser allows; YouTube shows its "unmute" button. */
+  let ytPlaying = false;
+  window.addEventListener("message", function (e) {
+    if (e.origin !== YT_ORIGIN || typeof e.data !== "string") return;
+    let d = null;
+    try { d = JSON.parse(e.data); } catch (err) { return; }
+    const st = d && d.info && typeof d.info === "object" ? d.info.playerState : undefined;
+    if (st === 1 || st === 3) ytPlaying = true;   // playing, or buffering on its way to playing
+  });
+  function autostart(frame) {
+    ytPlaying = false;
+    frame.addEventListener("load", function () {
+      try { frame.contentWindow.postMessage(JSON.stringify({ event: "listening", id: 1 }), YT_ORIGIN); } catch (e) { return; }
+      ytSend(frame, "playVideo");
+      setTimeout(function () {
+        if (!frame.isConnected || ytPlaying) return;
+        ytSend(frame, "mute");
+        ytSend(frame, "playVideo");
+      }, 1800);
+    });
   }
   function enterFull(el) {
     const req = el.requestFullscreen || el.webkitRequestFullscreen || el.webkitEnterFullscreen;
