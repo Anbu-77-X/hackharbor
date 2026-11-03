@@ -921,3 +921,26 @@ html.drawer-open, html.drawer-open body { overflow: hidden; }
 .pl-strip-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .pl-strip-head .sec-title { margin: 0; }
 .pl-strip-head .ghost-btn { height: 32px; }
+
+/* Full screen: the browser's own (the player box), or, where a browser won't allow it, the player
+   simply fills the window. */
+.player:fullscreen, .player:-webkit-full-screen { width: 100vw; height: 100vh; max-width: none; aspect-ratio: auto; border-radius: 0; background: #000; }
+html.player-max, html.player-max body { overflow: hidden; }
+html.player-max .player { position: fixed; inset: 0; z-index: 200; width: 100vw; height: 100vh; height: 100dvh; max-width: none; aspect-ratio: auto; margin: 0; border-radius: 0; background: #000; }
+.player-exit {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  z-index: 3;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(8, 13, 30, 0.82);
+  color: #f7f8fc;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.player-exit:hover, .player-exit:focus-visible { background: #c6c1ff; color: #101b3b; }

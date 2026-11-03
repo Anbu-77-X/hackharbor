@@ -21,6 +21,7 @@
     filters: "M4 7h16M7 12h10M10 17h4",
     menu: "M4 6h16M4 12h16M4 18h16",
     search: "M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zM15.2 15.2 20 20",
+    expand: "M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5",
     hash: "M9.5 4 7.5 20M16.5 4l-2 16M4.5 9h15.5M4 15h15.5",
     save: "M4 6h12M4 11h12M4 16h8M18 13v7M14.5 16.5h7",
     external: "M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5",
@@ -1042,6 +1043,10 @@
       laterBtn.setAttribute("aria-pressed", String(on));
       laterBtn.replaceChild(icon(on ? "check" : "later"), laterBtn.querySelector("svg"));
     });
+    // Our own full-screen button: some browsers (TVs, iPhones) won't let YouTube's player go full
+    // screen from inside the page, but they will for the page's own player box. Where even that
+    // isn't available, the player fills the window instead, with a button to come back.
+    const fullBtn = actButton("expand", "Full screen", null, function () { enterFull(player); });
     const saveBtn = actButton("save", "Save", null, function () {
       if (saveBox) { saveBox.remove(); saveBox = null; saveBtn.setAttribute("aria-expanded", "false"); return; }
       saveBox = savePanel(v);
@@ -1052,7 +1057,7 @@
     const row = h("div", { class: "w-row" },
       h("div", { class: "w-who" }, h("button", { class: "ch-name", type: "button", onclick: function () { go("channel", v.channel); }, text: v.channel }), who),
       h("div", { class: "actions" },
-        h("div", { class: "split" }, likeBtn, dislikeBtn), laterBtn, saveBtn,
+        h("div", { class: "split" }, likeBtn, dislikeBtn), fullBtn, laterBtn, saveBtn,
         h("a", { class: "act", href: ytLink(v), target: "_blank", rel: "noopener" }, icon("external"), "YouTube")));
 
     const left = h("div", { class: "w-main" }, player, h("h1", { class: "w-title", text: v.title }), row, detailBox);
@@ -1123,7 +1128,36 @@
   }
   function refresh() { history.replaceState(null, "", hashFor()); render(); }
   window.addEventListener("popstate", function () { readHash(); closeDrawer(); render(); });
+  function enterFull(el) {
+    const req = el.requestFullscreen || el.webkitRequestFullscreen || el.webkitEnterFullscreen;
+    if (req) {
+      try {
+        const done = req.call(el);
+        if (done && typeof done.catch === "function") done.catch(function () { fakeFull(el, true); });
+        return;
+      } catch (e) { /* fall through to the in-page version */ }
+    }
+    fakeFull(el, true);
+  }
+  function fakeFull(el, on) {
+    document.documentElement.classList.toggle("player-max", on);
+    let exit = el.querySelector(".player-exit");
+    if (on && !exit) {
+      exit = h("button", { class: "player-exit", type: "button", onclick: function () { fakeFull(el, false); } }, "Exit full screen");
+      el.appendChild(exit);
+      exit.focus();
+    } else if (!on && exit) {
+      exit.remove();
+    }
+  }
+  document.addEventListener("keydown", function (e) {
+    if ((e.key === "Escape" || e.key === "Backspace" || e.key === "GoBack") && document.documentElement.classList.contains("player-max")) {
+      const p = document.querySelector(".player");
+      if (p) { e.preventDefault(); fakeFull(p, false); }
+    }
+  });
   function render() {
+    document.documentElement.classList.remove("player-max");
     renderSide();
     requestAnimationFrame(shadeSide);
     const old = document.getElementById("chip-scroll");
