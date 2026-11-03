@@ -1,0 +1,53 @@
+# Where the pipeline hears about videos besides the channels it watches.
+# Every source is optional: if one fails or gets blocked, the run carries on
+# without it and the run report says so.
+
+hacker_news:
+  enabled: true
+  # Walks back through old Hacker News posts and comments that link YouTube,
+  # a slice per run, to find classics people keep recommending.
+  backfill: true
+  backfill_from_year: 2010
+
+lobsters:
+  enabled: true
+  tags: [security, video, reversing, cryptography, networking]
+
+reddit:
+  enabled: true
+  # Uses the public feeds. With REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET set,
+  # it uses the API instead, which also returns vote counts.
+  subreddits: [netsec, bugbounty, AskNetsec, redteamsec, blueteamsec, ReverseEngineering, Malware, securityCTF, cybersecurity, crypto, Pentesting, osint, computerforensics, LiveOverflow, hacking]
+
+mastodon:
+  enabled: true
+  instances:
+    - host: infosec.exchange
+      tags: [bugbounty, infosec, redteam, blueteam, dfir, malware, reverseengineering, appsec, cloudsecurity, aisecurity, ctf]
+    - host: mastodon.social
+      tags: [bugbounty, infosec, cybersecurity, redteam, dfir, aisecurity]
+    - host: ioc.exchange
+      tags: [infosec, bugbounty, dfir, malware]
+
+youtube_search:
+  enabled: true
+  # Extra searches on top of the per-topic ones in taxonomy.yml.
+  queries_en: ["security conference talk", "vulnerability research talk", "hacking explained deep dive"]
+  # Every other search is one of these across all time, so the best-known explanation of
+  # each bug class and technique is in the library, not only what's new.
+  classic_queries: [
+    "SSRF explained", "IDOR bug bounty", "XSS deep dive", "SQL injection explained", "HTTP request smuggling",
+    "web cache poisoning", "prototype pollution", "OAuth vulnerabilities", "JWT attacks", "CSRF explained",
+    "XXE injection", "server side template injection", "insecure deserialization", "race condition web vulnerability",
+    "GraphQL hacking", "CORS misconfiguration", "open redirect bug bounty", "file upload vulnerability",
+    "path traversal", "business logic vulnerabilities", "subdomain takeover", "authentication bypass bug bounty",
+    "account takeover bug bounty", "2FA bypass", "SAML attacks", "websocket hacking", "DOM XSS", "CSP bypass",
+    "dependency confusion", "API security testing", "mass assignment vulnerability", "password reset vulnerability",
+    "android app pentesting", "frida tutorial", "android deep link vulnerability", "android webview vulnerability",
+    "ios app pentesting", "ssl pinning bypass", "mobile bug bounty", "android intent vulnerability",
+    "kerberoasting explained", "active directory attacks", "ntlm relay", "adcs attacks", "bloodhound",
+    "heap exploitation", "rop chain explained", "format string exploit", "kernel exploitation",
+    "reverse engineering tutorial", "ghidra tutorial", "malware analysis tutorial", "fuzzing tutorial",
+    "aws pentesting", "azure ad attacks", "kubernetes security attacks", "prompt injection explained",
+    "hackthebox walkthrough", "ctf web challenge", "binary exploitation ctf", "recon methodology bug bounty"]
+  queries_ar: ["شرح ثغرة", "bug bounty بالعربي", "اختبار اختراق تطبيقات الويب", "شرح أمن المعلومات", "هندسة عكسية شرح", "ثغرات الويب شرح"]

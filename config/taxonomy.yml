@@ -1,0 +1,410 @@
+# What HackHarbor covers, and how a video is matched to it.
+#
+# Every category has topics. "terms" are phrases looked for in a video's title,
+# tags, chapters and description. The title counts most. Numbers are weights;
+# a negative weight pushes a video away from that category.
+#
+# "search" lists YouTube searches the pipeline rotates through to find new
+# videos and new channels for that topic.
+#
+# Age rules per category decide what an older video has to prove:
+#   fresh_months       newer than this, a video is judged as new
+#   classic_max_years  older videos are considered up to this age...
+#   classic_min_score  ...and only kept if they're evergreen and score this high
+#
+# requires_security_context: the video (or its channel) must also be clearly
+# about security. Used for Fundamentals, where words like "linux" or "http"
+# match a lot of general programming videos.
+
+security_terms:
+  security: 1
+  cybersecurity: 1.5
+  "cyber security": 1.5
+  infosec: 2
+  hacking: 1.5
+  hacker: 1
+  hackers: 1
+  exploit: 2
+  exploits: 2
+  exploitation: 2
+  exploiting: 2
+  exploited: 1.5
+  attacks: 1
+  attacking: 1.5
+  hacks: 1
+  hacked: 1
+  vulnerability: 2
+  vulnerabilities: 2
+  cve: 2
+  "zero-day": 2
+  0day: 2
+  pentest: 2
+  pentesting: 2
+  pentester: 2
+  "penetration testing": 2
+  appsec: 2
+  "application security": 2
+  "offensive security": 2
+  attacker: 1
+  attackers: 1
+  "threat model": 1.5
+  "security research": 2
+  "security researcher": 2
+  malware: 1.5
+  "red team": 1.5
+  "blue team": 1.5
+  ctf: 1.5
+  "أمن المعلومات": 2
+  "الأمن السيبراني": 2
+  "اختبار اختراق": 2
+  ثغرة: 2
+  ثغرات: 2
+  اختراق: 1.5
+  "prompt injection": 3
+  "ai security": 3
+  "llm security": 3
+  "ai red teaming": 3
+  "ai red team": 3
+  jailbreak: 2
+  jailbreaking: 2
+  hackbot: 2
+  hackbots: 2
+  "data poisoning": 2
+  "adversarial machine learning": 2
+  "privilege escalation": 2
+  misconfiguration: 1.5
+  misconfigurations: 1.5
+  "attack surface": 1.5
+  "attack path": 1.5
+  "attack paths": 1.5
+  abuse: 1
+  abusing: 1.5
+  bypass: 1.5
+  bypassing: 1.5
+  "bug bounty": 2
+  "reverse engineering": 2
+  "reverse engineer": 2
+  "reverse engineered": 2
+  obfuscation: 1.5
+  deobfuscation: 2
+  "black hat": 2
+  "black-hat": 2
+  surveillance: 1.5
+  privacy: 1
+  untrusted: 1
+  censorship: 1
+  secure: 1
+  secured: 1
+  securing: 1
+  xss: 2
+  csrf: 2
+  ssrf: 2
+  sqli: 2
+  "sql injection": 2
+  idor: 2
+  rce: 2
+  owasp: 2
+  "cyber threat": 1.5
+  "cyber threats": 1.5
+  cyberattack: 2
+  cyberattacks: 2
+  cybercrime: 1.5
+  reversing: 1.5
+  fuzzing: 2
+  fuzzer: 2
+  "control flow integrity": 2
+  jailbroke: 1.5
+  jailbroken: 1.5
+  spyware: 2
+  ransomware: 2
+  phishing: 2
+  rootkit: 2
+  backdoor: 2
+  "threat intelligence": 2
+  "threat hunting": 2
+  hack: 1
+  attack: 1
+  oscp: 2
+  oswe: 2
+  osep: 2
+  spoofing: 1.5
+  bola: 2
+  backdoors: 2
+  malicious: 1.5
+  breach: 1.5
+  breaches: 1.5
+  vulnerable: 1.5
+
+# A title containing any of these is rejected outright.
+reject_terms:
+  - hack instagram
+  - hack facebook
+  - hack whatsapp
+  - hack tiktok
+  - hack snapchat
+  - hack any account
+  - hack any phone
+  - hack wifi password
+  - wifi password hack
+  - hack someone
+  - free robux
+  - aimbot
+  - free fire
+  - pubg hack
+  - mod apk
+  - make money online
+  - passive income
+  - trading bot
+  - crypto signals
+  - airdrop
+  - giveaway
+  - prank
+  - reaction
+  - "#shorts"
+  - unban
+  - recover hacked account
+
+types:
+  - {key: talk, name: Talks}
+  - {key: lecture, name: Lectures}
+  - {key: tutorial, name: Tutorials}
+  - {key: walkthrough, name: Walkthroughs}
+  - {key: explainer, name: Explainers}
+  - {key: live, name: Live streams}
+  - {key: podcast, name: Podcasts}
+
+categories:
+  - key: bounty
+    name: Bug bounty
+    fresh_months: 18
+    classic_max_years: 10
+    classic_min_score: 8.5
+    terms: {"bug bounty": 5, bugbounty: 5, "bug bounties": 5, "bug hunting": 4, "bug hunter": 4, "bug hunters": 4, hackerone: 3, bugcrowd: 3, intigriti: 3, yeswehack: 3, immunefi: 3, "responsible disclosure": 2, "vulnerability disclosure": 2, bounty: 1.5, "web pentest": 2, "باونتي": 4}
+    topics:
+      - key: web
+        name: Web
+        terms: {xss: 3, "cross-site scripting": 3, "cross site scripting": 3, "dom xss": 3, ssrf: 3, "server-side request forgery": 3, sqli: 3, "sql injection": 3, "nosql injection": 3, idor: 3, "insecure direct object": 3, csrf: 3, "request smuggling": 4, desync: 3, "cache poisoning": 3, "cache deception": 3, "prototype pollution": 3, "access control": 2, "broken access": 2, "business logic": 2, "race condition": 2, "race conditions": 2, oauth: 2, "open redirect": 2, "path traversal": 3, "directory traversal": 3, lfi: 2, xxe: 3, ssti: 3, "template injection": 3, deserialization: 2, cors: 2, "burp suite": 2, burp: 1.5, "web security": 2, "web application": 1, "web app": 1, "file upload": 2, "account takeover": 3, jwt: 2, clickjacking: 2, csp: 1.5, "content security policy": 2, "subdomain takeover": 3, "host header": 2, "command injection": 3, "remote code execution": 1.5, rce: 1.5, "ثغرات الويب": 3}
+        search: ["xss bug bounty", "ssrf vulnerability", "http request smuggling", "account takeover bug bounty", "idor bug bounty", "web cache poisoning", "prototype pollution", "race condition vulnerability web"]
+      - key: api
+        name: APIs
+        terms: {"api security": 3, "api hacking": 4, "api pentest": 4, "api pentesting": 4, graphql: 3, "rest api": 2, bola: 3, bfla: 3, "mass assignment": 3, swagger: 2, openapi: 2, grpc: 2, websocket: 2, websockets: 2, "owasp api": 3, api: 1}
+        search: ["api hacking", "graphql security", "api bug bounty", "bola vulnerability"]
+      - key: mobile
+        name: Mobile
+        terms: {android: 3, ios: 3, apk: 3, frida: 4, objection: 3, "ssl pinning": 4, "certificate pinning": 4, jadx: 3, smali: 3, "mobile app": 2, "mobile apps": 2, "mobile security": 3, "mobile hacking": 4, "mobile pentest": 4, "mobile pentesting": 4, "deep link": 3, "deep links": 3, deeplink: 3, ipa: 2, mobsf: 3, drozer: 3, "react native": 1, flutter: 1}
+        search: ["android bug bounty", "ios app pentesting", "frida tutorial", "ssl pinning bypass", "android app hacking", "mobile app security testing"]
+      - key: recon
+        name: Recon
+        terms: {recon: 4, reconnaissance: 3, subdomain: 3, subdomains: 3, "subdomain enumeration": 4, "asset discovery": 4, "attack surface": 3, amass: 3, subfinder: 3, httpx: 2, nuclei: 2, ffuf: 2, "content discovery": 3, shodan: 2, censys: 2, "google dorks": 2, dorking: 2, wayback: 2, "javascript files": 2, "js files": 2, masscan: 2, nmap: 1}
+        search: ["bug bounty recon", "subdomain enumeration", "attack surface discovery", "recon methodology"]
+      - key: web3
+        name: Web3
+        terms: {"smart contract": 4, "smart contracts": 4, solidity: 4, defi: 3, web3: 3, ethereum: 2, reentrancy: 4, "flash loan": 4, code4rena: 4, evm: 2, "blockchain security": 4}
+        search: ["smart contract security", "solidity vulnerabilities", "defi exploit explained"]
+      - key: live
+        name: Live hunting
+        terms: {"live hunting": 5, "live hacking": 4, "hunting live": 4, "live recon": 4, "hacking live": 3, "live bug bounty": 5, "bug bounty live": 5}
+        search: ["live bug bounty hunting"]
+      - key: reports
+        name: Real reports
+        terms: {"bug report": 3, "report explained": 4, "reports explained": 4, "disclosed report": 4, "hackerone report": 4, "bounty writeup": 4, writeup: 1.5, "write-up": 1.5, "how i found": 3, payout: 2}
+        search: ["bug bounty report explained", "disclosed hackerone report"]
+
+  - key: ai
+    name: AI security
+    fresh_months: 12
+    classic_max_years: 3
+    classic_min_score: 8.8
+    requires_security_context: true
+    terms: {"ai security": 5, "llm security": 5, "ai red teaming": 5, "ai red team": 5, "machine learning security": 4, "adversarial machine learning": 4, llm: 1.5, llms: 1.5, "large language model": 1.5, "large language models": 1.5, chatgpt: 1, genai: 1, "generative ai": 1, "ai agents": 1, agents: 1, agentic: 3, hackbot: 3, hackbots: 3, "coding agents": 3, "computer-use": 3, "computer use agents": 3, copilot: 1, ai: 0.5}
+    topics:
+      - key: attack
+        name: Attacking AI
+        terms: {"prompt injection": 5, "indirect prompt injection": 5, jailbreak: 3, jailbreaks: 3, jailbreaking: 3, "data poisoning": 4, "model extraction": 4, "adversarial examples": 4, "adversarial attack": 3, "adversarial attacks": 3, "membership inference": 4, "model inversion": 4, "agent hijacking": 4, "tool poisoning": 4, "mcp security": 4, "ai agent security": 4, "system prompt": 3, guardrails: 2, "owasp llm": 4, "llm top 10": 4, "ascii smuggling": 4, exfiltration: 1.5, "exploiting ai": 4, "attacking ai": 4, "hacking ai": 4, "ai agents": 1.5, agentic: 2}
+        search: ["prompt injection", "llm security", "ai agent security", "llm jailbreak research", "mcp security", "ai red teaming"]
+      - key: tools
+        name: AI tools
+        terms: {hackbot: 5, hackbots: 5, "ai for hacking": 5, "ai for bug bounty": 5, "ai hacking": 3, "autonomous hacking": 5, "llm for security": 4, "ai pentest": 4, "ai pentesting": 4, "ai-assisted": 3, "ai assisted": 3, "ai agent": 2, "ai agents": 2, "using ai": 2, mcp: 1.5, "ai fuzzing": 4, "vulnerability discovery": 2, xbow: 4, "big sleep": 4}
+        search: ["hackbot", "ai for bug bounty", "ai pentesting agent", "llm vulnerability discovery", "ai hacking tools"]
+
+  - key: red
+    name: Red team
+    fresh_months: 18
+    classic_max_years: 6
+    classic_min_score: 8.5
+    terms: {"red team": 5, "red teaming": 5, "red teamer": 5, "adversary simulation": 5, "adversary emulation": 5, "offensive security": 2, "post-exploitation": 3, "post exploitation": 3, "lateral movement": 4, "privilege escalation": 2.5, persistence: 1.5, "internal pentest": 4, oscp: 2, crto: 3}
+    topics:
+      - key: ad
+        name: Active Directory
+        terms: {"active directory": 5, kerberos: 4, kerberoasting: 5, "as-rep roasting": 5, bloodhound: 4, "ntlm relay": 5, ntlm: 3, "golden ticket": 4, "silver ticket": 4, dcsync: 5, adcs: 5, "certificate services": 3, "pass the hash": 4, mimikatz: 3, "domain admin": 3, "domain controller": 3, impacket: 3, ldap: 1.5, gpo: 2, rbcd: 4, "shadow credentials": 4, esc1: 4, esc8: 4, petitpotam: 4, responder: 2}
+        search: ["active directory attacks", "adcs exploitation", "kerberoasting", "ntlm relay attack", "bloodhound attack paths"]
+      - key: c2
+        name: C2 tradecraft
+        terms: {"command and control": 4, c2: 3, "c2 framework": 5, "cobalt strike": 4, sliver: 3, havoc: 3, mythic: 3, opsec: 2, tradecraft: 4, redirector: 3, implant: 3}
+        search: ["c2 framework red team", "red team tradecraft", "red team infrastructure"]
+      - key: access
+        name: Initial access
+        terms: {"initial access": 5, phishing: 3, "spear phishing": 4, "social engineering": 3, "html smuggling": 4, evilginx: 4, "adversary in the middle": 4, aitm: 4, "mfa bypass": 4, vishing: 3, pretexting: 3, payload: 1.5}
+        search: ["initial access red team", "phishing techniques red team", "mfa bypass phishing"]
+      - key: evasion
+        name: Evasion
+        terms: {"edr evasion": 5, "av evasion": 5, "antivirus evasion": 5, "bypass edr": 5, edr: 3, amsi: 4, etw: 3, syscalls: 4, "direct syscalls": 5, "process injection": 4, shellcode: 3, "malware development": 5, maldev: 5, unhooking: 4, "sleep obfuscation": 5, "beacon object": 4}
+        search: ["edr evasion", "malware development", "process injection techniques", "amsi bypass"]
+      - key: osint
+        name: OSINT
+        terms: {osint: 5, "open source intelligence": 5, geolocation: 3, geoint: 4, socmint: 4, "trace labs": 4, maltego: 3}
+        search: ["osint investigation techniques", "osint tools tutorial", "geolocation osint"]
+
+  - key: cloud
+    name: Cloud
+    fresh_months: 18
+    classic_max_years: 4
+    classic_min_score: 8.8
+    requires_security_context: true
+    terms: {"cloud security": 5, "cloud pentest": 5, "cloud pentesting": 5, "cloud hacking": 5, "cloud attacks": 4, cloud: 1, iam: 2, misconfiguration: 1.5, cspm: 3, "fwd:cloudsec": 5}
+    topics:
+      - key: aws
+        name: AWS
+        terms: {aws: 3, "amazon web services": 3, s3: 2, "s3 bucket": 3, "iam role": 3, "iam policy": 3, lambda: 1.5, ec2: 2, imds: 4, "metadata service": 3, cloudtrail: 3, pacu: 4, "assume role": 3, "aws security": 5}
+        search: ["aws security", "aws pentesting", "aws iam privilege escalation"]
+      - key: azure
+        name: Azure
+        terms: {azure: 3, "entra id": 4, "azure ad": 4, "microsoft 365": 2, m365: 2, "office 365": 2, "conditional access": 3, "azure security": 5, roadtools: 4, aadinternals: 4, "graph api": 2, intune: 2, "token theft": 3}
+        search: ["azure security", "entra id attacks", "azure pentesting"]
+      - key: gcp
+        name: Google Cloud
+        terms: {gcp: 4, "google cloud": 3, "gcp security": 5, "service account": 2.5, "workload identity": 3, "cloud run": 1.5}
+        search: ["gcp security", "google cloud pentesting"]
+      - key: k8s
+        name: Kubernetes
+        terms: {kubernetes: 4, k8s: 4, container: 2, containers: 2, docker: 2.5, "container escape": 5, "container security": 5, "pod security": 4, kubelet: 4, rbac: 2, eks: 2, aks: 2, gke: 2, "runtime security": 3, falco: 3, ebpf: 2.5}
+        search: ["kubernetes security", "container escape", "kubernetes attack"]
+      - key: supply
+        name: Supply chain
+        terms: {"supply chain": 4, "software supply chain": 5, "ci/cd": 4, cicd: 4, "github actions": 3.5, "dependency confusion": 5, typosquatting: 4, sbom: 3, sigstore: 3, npm: 1.5, pypi: 1.5, "build pipeline": 3}
+        search: ["software supply chain attack", "github actions security", "ci/cd pipeline attacks", "dependency confusion"]
+
+  - key: exploit
+    name: Exploitation
+    fresh_months: 18
+    classic_max_years: 12
+    classic_min_score: 8.5
+    terms: {"exploit development": 5, "exploit dev": 5, "vulnerability research": 4, "reverse engineering": 4, binary: 1.5, assembly: 2, x86: 2, arm64: 2, debugger: 2, gdb: 2, ghidra: 3, "ida pro": 3, "binary ninja": 3, radare2: 3, fuzzing: 3, fuzzer: 3, "memory corruption": 4, "هندسة عكسية": 4}
+    topics:
+      - key: pwn
+        name: Binary exploitation
+        terms: {"buffer overflow": 4, "heap exploitation": 5, "heap overflow": 4, "use after free": 5, "use-after-free": 5, rop: 3, "return oriented programming": 5, "format string": 4, "binary exploitation": 5, pwn: 3, pwntools: 4, aslr: 3, "kernel exploit": 5, "kernel exploitation": 5, "browser exploit": 5, "browser exploitation": 5, v8: 3, "sandbox escape": 5, "type confusion": 4, "integer overflow": 3}
+        search: ["binary exploitation", "heap exploitation", "kernel exploitation", "browser exploitation", "use after free exploit"]
+      - key: re
+        name: Reverse engineering
+        terms: {"reverse engineering": 5, ghidra: 4, "ida pro": 4, "binary ninja": 4, decompiler: 3, disassembly: 3, crackme: 4, obfuscation: 3, deobfuscation: 4, "game hacking": 3, "anti-debug": 4, "dynamic analysis": 2}
+        search: ["reverse engineering ghidra", "deobfuscation reverse engineering", "game hacking reverse engineering"]
+      - key: malware
+        name: Malware analysis
+        terms: {"malware analysis": 5, malware: 4, ransomware: 3, "threat actor": 2, yara: 4, unpacking: 4, packer: 3, stealer: 3, infostealer: 4, botnet: 3, trojan: 2, ioc: 2}
+        search: ["malware analysis", "malware unpacking", "reverse engineering ransomware", "infostealer analysis"]
+
+  - key: blue
+    name: Blue team
+    fresh_months: 18
+    classic_max_years: 6
+    classic_min_score: 8.5
+    terms: {"blue team": 5, "defensive security": 4, "soc analyst": 4, soc: 2, siem: 3, "security operations": 3, "incident response": 4, dfir: 5, "detection engineering": 5, "threat hunting": 5, "threat intelligence": 3, "purple team": 4}
+    topics:
+      - key: detect
+        name: Threat hunting
+        terms: {"detection engineering": 5, "threat hunting": 5, "sigma rules": 5, sigma: 3, splunk: 3, kql: 4, sentinel: 2, sysmon: 4, "event logs": 3, "windows event": 3, detection: 2, "mitre att&ck": 3, "att&ck": 3, zeek: 3, suricata: 3, "network detection": 4}
+        search: ["detection engineering", "threat hunting", "sigma rules", "sysmon detection"]
+      - key: dfir
+        name: DFIR
+        terms: {dfir: 5, forensics: 4, "digital forensics": 5, "memory forensics": 5, volatility: 4, "incident response": 4, "disk forensics": 4, "windows forensics": 5, "linux forensics": 5, "log analysis": 3, velociraptor: 4, kape: 4, evtx: 4}
+        search: ["digital forensics", "memory forensics volatility", "windows forensics artifacts", "incident response walkthrough"]
+      - key: harden
+        name: Hardening
+        terms: {hardening: 4, "zero trust": 3, "least privilege": 3, "network segmentation": 3, "security architecture": 3, "threat modeling": 3, "secure by design": 3, laps: 3}
+        search: ["windows hardening", "active directory hardening", "threat modeling"]
+
+  - key: crypto
+    name: Cryptography
+    fresh_months: 24
+    classic_max_years: 30
+    classic_min_score: 8.5
+    terms: {cryptography: 5, cryptographic: 4, encryption: 3, cipher: 3, ciphers: 3, "public key": 3, "hash function": 4, "hash functions": 4, hashing: 2.5, "digital signature": 4, "digital signatures": 4, tls: 3, "key exchange": 4, "diffie-hellman": 5, "diffie hellman": 5, rsa: 3, aes: 3, "elliptic curve": 5, "elliptic curves": 5, "zero knowledge": 4, "zero-knowledge": 4, "post-quantum": 5, "post quantum": 5, "real world crypto": 5, "side channel": 3, "side-channel": 3, "تشفير": 4, bitcoin: -3, "crypto trading": -6, trading: -4, memecoin: -6, altcoin: -6, nft: -3, "crypto news": -5, "price prediction": -6}
+    topics:
+      - key: theory
+        name: Crypto basics
+        terms: {"introduction to cryptography": 5, "block cipher": 4, "stream cipher": 4, "modes of operation": 4, "number theory": 3, "finite field": 4, "modular arithmetic": 4, hmac: 3, pki: 3, "x.509": 3, kdf: 3, "tls handshake": 4, "how encryption works": 4}
+        search: ["cryptography lecture", "elliptic curve cryptography explained", "tls handshake explained", "post-quantum cryptography"]
+      - key: breaking
+        name: Breaking crypto
+        terms: {"padding oracle": 5, "timing attack": 4, "side channel attack": 5, "side-channel attack": 5, cryptanalysis: 5, "nonce reuse": 5, "length extension": 5, bleichenbacher: 5, "power analysis": 4, "fault injection": 4, "crypto ctf": 4, cryptopals: 5, "hash collision": 4, "weak randomness": 4}
+        search: ["padding oracle attack", "cryptanalysis explained", "side channel attack cryptography", "cryptopals"]
+
+  - key: hardware
+    name: Hardware
+    fresh_months: 18
+    classic_max_years: 10
+    classic_min_score: 8.5
+    terms: {"hardware hacking": 5, "hardware security": 5, iot: 3, "iot security": 5, embedded: 2.5, firmware: 3, "firmware extraction": 5, uart: 4, jtag: 4, swd: 4, "spi flash": 4, glitching: 4, "voltage glitch": 5, "fault injection": 3, pcb: 2, "logic analyzer": 3, "flipper zero": 2}
+    topics:
+      - key: embedded
+        name: IoT
+        terms: {firmware: 3, uart: 4, jtag: 4, bootloader: 3, router: 2, "iot device": 4, "iot devices": 4, "embedded linux": 4, binwalk: 4, esp32: 2, microcontroller: 3, "secure boot": 4}
+        search: ["firmware extraction", "iot hacking", "uart jtag hacking", "router firmware vulnerability"]
+      - key: radio
+        name: Radio & SDR
+        terms: {sdr: 4, "software defined radio": 5, "radio frequency": 3, hackrf: 5, gnuradio: 4, "gnu radio": 4, bluetooth: 3, ble: 3, "802.11": 3, zigbee: 4, lora: 3, rfid: 4, nfc: 3, "replay attack": 3}
+        search: ["sdr hacking", "bluetooth low energy hacking", "rfid hacking"]
+      - key: ics
+        name: ICS / OT
+        terms: {ics: 3, "ics security": 5, "ot security": 5, "operational technology": 4, scada: 5, plc: 4, plcs: 4, modbus: 5, "industrial control": 5, "industrial control systems": 5, "critical infrastructure": 3, "ot cyber": 5, dnp3: 5, "building automation": 3}
+        search: ["ics security talk", "ot security", "scada hacking", "plc exploitation"]
+      - key: cars
+        name: Car hacking
+        terms: {"car hacking": 5, automotive: 4, "can bus": 5, ecu: 4, obd: 4, keyless: 3, tesla: 2}
+        search: ["car hacking can bus", "automotive security research"]
+
+  - key: ctf
+    name: CTF
+    fresh_months: 24
+    classic_max_years: 7
+    classic_min_score: 8.6
+    terms: {ctf: 5, "capture the flag": 5, "ctf writeup": 5, "ctf walkthrough": 5, walkthrough: 2, "hack the box": 4, hackthebox: 4, htb: 4, tryhackme: 4, picoctf: 4, vulnhub: 4, "proving grounds": 4}
+    topics:
+      - key: boxes
+        name: Boxes & labs
+        terms: {"hack the box": 4, hackthebox: 4, htb: 4, tryhackme: 4, vulnhub: 4, "proving grounds": 4, "user flag": 3, "root flag": 3, foothold: 3, privesc: 2}
+        search: ["hackthebox walkthrough", "tryhackme walkthrough"]
+      - key: jeopardy
+        name: Jeopardy
+        terms: {"ctf challenge": 4, picoctf: 4, "google ctf": 5, "defcon ctf": 5, plaidctf: 5, hxp: 4, ctftime: 4, jeopardy: 3, "pwn challenge": 4, "crypto challenge": 4, "web challenge": 3, "rev challenge": 4, "forensics challenge": 4}
+        search: ["ctf challenge writeup", "ctf pwn challenge walkthrough", "picoctf walkthrough"]
+
+  - key: basics
+    name: Fundamentals
+    fresh_months: 36
+    classic_max_years: 30
+    classic_min_score: 8.5
+    requires_security_context: true
+    terms: {fundamentals: 2, basics: 1.5, "how it works": 1, explained: 1, introduction: 1, "computer science": 1.5, "operating system": 2}
+    topics:
+      - key: net
+        name: Networking
+        terms: {networking: 4, "computer networks": 4, tcp: 3, "tcp/ip": 4, udp: 2.5, "osi model": 4, dns: 3, bgp: 4, subnetting: 4, routing: 2.5, wireshark: 4, "packet analysis": 4, packets: 2, vpn: 2, nat: 2, ipv6: 3, quic: 3}
+        search: ["wireshark packet analysis", "how dns works", "tcp ip explained"]
+      - key: os
+        name: Linux & Windows
+        terms: {linux: 3, "linux kernel": 3, bash: 2, "command line": 2, "windows internals": 5, "linux internals": 5, "file system": 2, "memory management": 3, "virtual memory": 4, syscall: 3, "system calls": 3, powershell: 2.5}
+        search: ["windows internals explained", "linux internals"]
+      - key: webfund
+        name: Web basics
+        terms: {"how the web works": 5, "http explained": 4, "same origin policy": 5, "same-origin": 4, cookies: 2, browser: 1.5, "oauth explained": 4, authentication: 2, https: 2, http: 1.5}
+        search: ["same origin policy explained", "how https works", "oauth explained"]
+      - key: code
+        name: Code review
+        terms: {"secure coding": 4, "code review": 3, "static analysis": 3, semgrep: 4, codeql: 4, python: 2.5, "c programming": 3, rust: 2, "from scratch": 2}
+        search: ["secure code review", "codeql tutorial", "semgrep rules"]
+      - key: career
+        name: Careers
+        terms: {career: 2, "career advice": 4, "how to get into": 3, roadmap: 2, mindset: 2, "how to learn": 3, certifications: 2}
+        search: []

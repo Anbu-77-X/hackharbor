@@ -1,0 +1,93 @@
+# The numbers the pipeline decides with. Defaults are tuned to keep only
+# strong videos; lower a threshold to let more in.
+
+run_every_hours: 2
+
+languages: [en, ar]
+min_duration_seconds: 240        # shorter videos (and every Short) are dropped
+max_duration_seconds: 43200      # 12 hours
+maturation_hours: 72             # new videos wait this long for comments and likes, except from core channels
+
+quality:
+  playlist_min: 7.5              # older videos in a trusted channel's playlist need this
+  publish_new: 7.0               # score a new video needs to be listed
+  core_allowance: 0.5            # core channels need this much less
+  broad_extra: 0.7               # broad channels need this much more
+  borderline_margin: 0.5         # this close to the line: looked at again after a week
+  min_relevance: 0.45            # how sure the classifier must be about the category
+  broad_min_relevance: 0.7
+  weights: {relevance: 0.28, praise: 0.22, engagement: 0.16, reputation: 0.16, content: 0.18}
+  community_bonus_max: 1.0       # added for Hacker News, Reddit, Lobsters and Mastodon buzz
+  clickbait_penalty: 2.5
+  judge_weight: 0.55             # how much the AI judge counts, when it's available
+
+gem:                             # "hidden gem": strong video, small audience
+  min_score: 8.3
+  max_views: 15000
+  max_subscribers: 25000
+
+library:                         # caps on older videos, so one channel can't flood a topic
+  max_classics_per_topic: 800
+  max_classics_per_channel_topic: 40
+  max_classics_per_channel_topic_core: 250
+  # Videos in a trusted creator's playlist are never capped: a series stays whole.
+
+home:
+  recent_days: 182               # strong videos from the last six months lead Home
+  recent_min_score: 8.0          # ...when they score at least this (above the library median)
+  size: 400
+  new_days: 45                   # "new" on Home means published within this many days
+  # One block of 12 slots, repeated. new = recent; buzz = what people are
+  # discussing now; classic = a top evergreen video; gem = hidden gem.
+  pattern: [new, new, new, buzz, new, new, new, classic, new, new, buzz, gem]
+  ai_min_per_block: 2            # AI security gets at least this many slots in every 12
+  max_same_category_per_block: 5
+  channel_window: 24             # within any 24 slots...
+  max_per_channel_in_window: 2   # ...a channel appears at most twice
+  classic_min_score: 9.0
+  classic_rotation_days: 14      # a classic shown on Home rests this long before coming back
+  buzz_hours: 72
+
+longs_min_minutes: 40
+
+youtube:
+  daily_units: 9000              # free quota is 10,000 a day; the rest is margin
+  search_calls_per_day: 16       # each search costs 100 units; channels and communities already bring plenty
+  search_unit_cost: 100          # set to 1 if your Google Cloud quota page shows searches in their own bucket
+  comments_per_run: 700
+  rss_workers: 8
+  max_channel_checks_per_run: 400
+
+judge:                           # optional Gemini judge (GEMINI_API_KEY)
+  models: [gemini-flash-lite-latest, gemini-flash-latest]
+  batch_size: 8
+  calls_per_run: 12
+  calls_per_day: 140
+
+discovery:
+  candidate_evals_per_run: 12
+  promote_relevance_share: 0.4   # share of a new channel's recent videos that must be on topic to watch it
+  promote_median_score: 6.5
+  occasional_relevance_share: 0.15
+  core_promotion: {min_published: 10, min_mean_score: 8.3}
+  dormant_after_months: 18
+  reevaluate_rejected_days: 120
+
+backfill:
+  channels_per_run: 15
+  top_share: 0.5                 # of uploads older than 18 months, the best-performing half is judged
+
+playlists:
+  channels_per_run: 8            # trusted channels whose playlists are read each run
+  refresh_days: 14               # each channel's playlists are read again after this
+  min_items: 4
+  max_per_channel: 30
+  max_pages: 4                   # up to 200 videos per playlist
+
+refresh:
+  rescore_at_days: [3, 7, 30]
+  stats_every_days: 7            # published videos' numbers are refreshed at least this often
+  forget_rejected_after_days: 7  # anything not listed keeps only its id and reason after this
+
+health:
+  fail_after_bad_runs: 3         # the run fails (and GitHub emails you) after this many bad runs in a row

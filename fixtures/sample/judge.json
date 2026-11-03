@@ -1,0 +1,348 @@
+{
+ "cRKToFkZMvk": {
+  "relevant": true,
+  "cats": [
+   "ai",
+   "bounty"
+  ],
+  "subs": [
+   "tools"
+  ],
+  "type": "talk",
+  "evergreen": false,
+  "value": 8.8,
+  "clickbait": false,
+  "summary": "Jason Haddix's Bug Bounty Village masterclass on hackbots: AI agents built to take on parts of a hunter's work.",
+  "why": "Where AI-assisted hunting is heading, from one of the field's best-known methodologists.",
+  "ideas": [],
+  "tags": [
+   "hackbots",
+   "ai-agents"
+  ],
+  "who": "Jason Haddix · DEF CON 34, Bug Bounty Village"
+ },
+ "jCFZFDHnZrQ": {
+  "relevant": true,
+  "cats": [
+   "ai"
+  ],
+  "subs": [
+   "tools"
+  ],
+  "type": "talk",
+  "evergreen": false,
+  "value": 9.0,
+  "clickbait": false,
+  "summary": "James Kettle asks whether AI can do original security research instead of repeating known bugs, and introduces the HTTP Terminator.",
+  "why": "Brand-new work from the researcher behind most modern request-smuggling techniques.",
+  "ideas": [],
+  "tags": [
+   "ai",
+   "http",
+   "research"
+  ],
+  "who": "James Kettle, Director of Research at PortSwigger · SEC-T 2026"
+ },
+ "kgkRih2MQtU": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "web"
+  ],
+  "type": "talk",
+  "evergreen": true,
+  "value": 9.6,
+  "clickbait": false,
+  "summary": "A front-end server and the back-end behind it can disagree about where one HTTP request ends and the next begins. Kettle shows how to find that disagreement safely and turn it into request smuggling against real sites.",
+  "why": "The talk that brought request smuggling back. New desync research still starts from it.",
+  "ideas": [
+   "Content-Length against Transfer-Encoding, and the CL.TE and TE.CL variants",
+   "Detecting a desync with timing, without disturbing other users",
+   "Turning a desync into poisoned responses and captured requests",
+   "The HTTP Request Smuggler extension for Burp Suite"
+  ],
+  "tags": [
+   "request-smuggling",
+   "http"
+  ],
+  "who": "James Kettle, Director of Research at PortSwigger · Black Hat USA 2019"
+ },
+ "z5wQNqQ-e6M": {
+  "relevant": true,
+  "cats": [
+   "ai",
+   "bounty"
+  ],
+  "subs": [
+   "tools"
+  ],
+  "type": "tutorial",
+  "evergreen": false,
+  "value": 8.2,
+  "clickbait": false,
+  "summary": "NahamSec builds his own hackbot for under $250 and shows how it's put together.",
+  "why": "A hands-on, low-cost take on the hackbot idea, from a hunter rather than a vendor.",
+  "ideas": [],
+  "tags": [
+   "hackbots",
+   "automation"
+  ],
+  "who": "Ben Sadeghipour (NahamSec)"
+ },
+ "Z9es1_BUXmQ": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "recon"
+  ],
+  "type": "tutorial",
+  "evergreen": false,
+  "value": 7.8,
+  "clickbait": false,
+  "summary": "NahamSec covers recon for bug bounty from the start: mapping what a target owns before testing any of it.",
+  "why": "A recent pass through recon basics from a well-known hunter.",
+  "ideas": [],
+  "tags": [
+   "recon",
+   "subdomains"
+  ],
+  "who": "Ben Sadeghipour (NahamSec)"
+ },
+ "jGSs4tiH7WM": {
+  "relevant": true,
+  "cats": [
+   "ai"
+  ],
+  "subs": [
+   "attack"
+  ],
+  "type": "talk",
+  "evergreen": true,
+  "value": 9.3,
+  "clickbait": false,
+  "summary": "Johann Rehberger walks through recent ways to exploit prompt injection in LLM apps, where text the model reads becomes instructions it follows, and how attackers turn that into data theft and unwanted actions.",
+  "why": "Rehberger has reported prompt injection bugs across major AI products. This is a dense tour of what works.",
+  "ideas": [],
+  "tags": [
+   "prompt-injection",
+   "llm"
+  ],
+  "who": "Johann Rehberger · Microsoft BlueHat 2024"
+ },
+ "EoaDgUgS6QA": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "web"
+  ],
+  "type": "explainer",
+  "evergreen": true,
+  "value": 9.0,
+  "clickbait": false,
+  "summary": "An animated walk through cross-site scripting: how injected script ends up running in someone else's browser, and the main kinds of XSS.",
+  "why": "Short and clear. Still the video people send to someone meeting XSS for the first time.",
+  "ideas": [],
+  "tags": [
+   "xss"
+  ],
+  "who": "PwnFunction"
+ },
+ "8pbz5y7_WkM": {
+  "relevant": true,
+  "cats": [
+   "ai"
+  ],
+  "subs": [
+   "attack"
+  ],
+  "type": "talk",
+  "evergreen": true,
+  "value": 9.3,
+  "clickbait": false,
+  "summary": "Rehberger shows how AI coding agents and computer-use agents can be taken over through the content they read, and what those attacks look like in practice.",
+  "why": "Agents act on what they read. This is one of the clearest looks at what goes wrong when they do.",
+  "ideas": [],
+  "tags": [
+   "ai-agents",
+   "prompt-injection"
+  ],
+  "who": "Johann Rehberger · 39C3, Chaos Communication Congress"
+ },
+ "qPlpN4BVnRY": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "recon"
+  ],
+  "type": "talk",
+  "evergreen": true,
+  "value": 9.0,
+  "clickbait": false,
+  "summary": "Jason Haddix walks through his bug-hunting methodology with a focus on recon: finding the domains and hosts a company owns before choosing what to test.",
+  "why": "Method, not tools, so it ages slowly. Hunters still point newcomers to it.",
+  "ideas": [],
+  "tags": [
+   "recon",
+   "methodology"
+  ],
+  "who": "Jason Haddix · DEF CON 28 Safe Mode, Red Team Village"
+ },
+ "GlvNwhq-uBg": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "api"
+  ],
+  "type": "talk",
+  "evergreen": true,
+  "value": 8.9,
+  "clickbait": false,
+  "summary": "Katie Paxton-Fear shows how to approach a GraphQL API as a hunter: learning what the schema exposes, then testing queries for bugs in who can see what.",
+  "why": "A chapter talk with few views and a clear method for an API type many hunters skip.",
+  "ideas": [],
+  "tags": [
+   "graphql",
+   "api"
+  ],
+  "who": "Katie Paxton-Fear (InsiderPhD) · OWASP London"
+ },
+ "voTHFdL9S2k": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "web"
+  ],
+  "type": "talk",
+  "evergreen": true,
+  "value": 9.4,
+  "clickbait": false,
+  "summary": "Orange Tsai shows that URL parsers in popular languages and libraries read the same URL differently, and uses those differences to get past SSRF protections.",
+  "why": "Parser differences are still behind new SSRF bypasses. This is where many hunters first met the idea.",
+  "ideas": [
+   "The parser that checks a URL and the one that fetches it can disagree",
+   "Crafted URLs that pass validation and still reach internal hosts",
+   "Chaining SSRF into remote code execution"
+  ],
+  "tags": [
+   "ssrf",
+   "url-parsing"
+  ],
+  "who": "Orange Tsai, DEVCORE · Black Hat USA 2017"
+ },
+ "2TofunAI6fU": {
+  "relevant": true,
+  "cats": [
+   "basics"
+  ],
+  "subs": [
+   "career"
+  ],
+  "type": "explainer",
+  "evergreen": true,
+  "value": 8.9,
+  "clickbait": false,
+  "summary": "LiveOverflow answers the question he's asked most: how do I learn hacking? His answer is that no secret step-by-step path exists, and that curiosity and understanding how things work matter more than finding the perfect course.",
+  "why": "Still the honest answer to “where do I start?”",
+  "ideas": [],
+  "tags": [
+   "learning"
+  ],
+  "who": "LiveOverflow"
+ },
+ "gINAtzdccts": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "web"
+  ],
+  "type": "tutorial",
+  "evergreen": true,
+  "value": 8.8,
+  "clickbait": false,
+  "summary": "Part of the Finding Your First Bug series: hunting IDORs by hand, with two accounts and a close look at the IDs each request sends.",
+  "why": "Patient and hands-on, the way most first IDORs are actually found.",
+  "ideas": [],
+  "tags": [
+   "idor",
+   "access-control"
+  ],
+  "who": "Katie Paxton-Fear (InsiderPhD)"
+ },
+ "ob9SgtFm6_g": {
+  "relevant": true,
+  "cats": [
+   "ctf"
+  ],
+  "subs": [
+   "boxes"
+  ],
+  "type": "walkthrough",
+  "evergreen": true,
+  "value": 9.0,
+  "clickbait": false,
+  "summary": "IppSec works through Reel, a Windows machine on Hack The Box, from the first scan to full control of the box.",
+  "why": "IppSec explains each step, not only the commands, which is why his walkthroughs are a reference.",
+  "ideas": [],
+  "tags": [
+   "hackthebox",
+   "windows"
+  ],
+  "who": "IppSec"
+ },
+ "3K1-a7dnA60": {
+  "relevant": true,
+  "cats": [
+   "bounty"
+  ],
+  "subs": [
+   "web"
+  ],
+  "type": "tutorial",
+  "evergreen": true,
+  "value": 8.7,
+  "clickbait": false,
+  "summary": "STÖK sets up two Burp Suite extensions, Autorize and AutoRepeater, so the requests you make as one user are replayed as another, and access-control bugs show up while you browse.",
+  "why": "Automates the tedious half of IDOR hunting.",
+  "ideas": [],
+  "tags": [
+   "idor",
+   "burp-suite"
+  ],
+  "who": "STÖK"
+ },
+ "ciNHn38EyRc": {
+  "relevant": true,
+  "cats": [
+   "basics",
+   "bounty"
+  ],
+  "subs": [
+   "web"
+  ],
+  "type": "explainer",
+  "evergreen": true,
+  "value": 8.8,
+  "clickbait": false,
+  "summary": "Dr Mike Pound runs a SQL injection against a deliberately weak web page, one step at a time, and shows why it works.",
+  "why": "Plain and unhurried. A good first look before the labs.",
+  "ideas": [],
+  "tags": [
+   "sqli"
+  ],
+  "who": "Dr Mike Pound · Computerphile"
+ }
+}

@@ -1,0 +1,141 @@
+# Starting channels. The pipeline finds more on its own (see docs/LOGIC.md);
+# this list is only the seed, and it doesn't have to be complete.
+#
+# Give a channel by "id" (UC...) or "handle" (@name). Handles are looked up once
+# and the id is kept. If a handle is wrong, the pipeline tries the name instead
+# and lists anything it couldn't find in the run report.
+#
+# tier
+#   core     trusted: new videos skip the waiting period and get a reputation boost
+#   watched  checked every few hours; videos are judged like any other
+#   broad    big channels only partly about security; only clearly relevant videos pass
+# kind       creator | conference | university | company | podcast
+#            (sets the default video type: conference -> talk, university -> lecture)
+# cats       categories the channel usually covers (a hint, not a rule)
+
+channels:
+  # Bug bounty and web
+  - {name: NahamSec, id: UCCZDt7MuC3Hzs6IH4xODLBw, handle: "@NahamSec", tier: core, kind: creator, cats: [bounty]}
+  - {name: InsiderPhD, handle: "@InsiderPhD", tier: core, kind: creator, cats: [bounty]}
+  - {name: STÖK, handle: "@STOKfredrik", tier: core, kind: creator, cats: [bounty]}
+  - {name: PortSwigger, handle: "@PortSwiggerTV", tier: core, kind: company, cats: [bounty]}
+  - {name: Bug Bounty Reports Explained, handle: "@BugBountyReportsExplained", tier: core, kind: creator, cats: [bounty]}
+  - {name: Critical Thinking - Bug Bounty Podcast, handle: "@criticalthinkingpodcast", tier: core, kind: podcast, cats: [bounty]}
+  - {name: Bug Bounty DEFCON, handle: "@BugBountyDEFCON", tier: core, kind: conference, cats: [bounty, ai]}
+  - {name: PwnFunction, handle: "@PwnFunction", tier: core, kind: creator, cats: [bounty, basics]}
+  - {name: Farah Hawa, handle: "@FarahHawa", tier: watched, kind: creator, cats: [bounty]}
+  - {name: Rana Khalil, handle: "@RanaKhalil101", tier: watched, kind: creator, cats: [bounty]}
+  - {name: TomNomNom, handle: "@TomNomNomDotCom", tier: watched, kind: creator, cats: [bounty]}
+  - {name: Intigriti, handle: "@intigriti", tier: watched, kind: company, cats: [bounty]}
+  - {name: HackerOne, handle: "@HackerOneTV", tier: watched, kind: company, cats: [bounty]}
+  - {name: Bugcrowd, handle: "@Bugcrowd", tier: watched, kind: company, cats: [bounty]}
+  - {name: YesWeHack, handle: "@YesWeHack", tier: watched, kind: company, cats: [bounty]}
+  - {name: Jason Haddix, handle: "@jhaddix", tier: watched, kind: creator, cats: [bounty, ai]}
+  - {name: hakluke, handle: "@hakluke", tier: watched, kind: creator, cats: [bounty]}
+  - {name: Assetnote, handle: "@assetnote", tier: watched, kind: company, cats: [bounty]}
+
+  # AI security
+  - {name: Embrace The Red, handle: "@embracethered", tier: core, kind: creator, cats: [ai]}
+  - {name: AI Village, handle: "@aivillage", tier: watched, kind: conference, cats: [ai]}
+  - {name: Daniel Miessler, handle: "@unsupervised-learning", tier: watched, kind: creator, cats: [ai]}
+  - {name: Lakera AI, handle: "@lakeraai", tier: watched, kind: company, cats: [ai]}
+  - {name: Arcanum Information Security, handle: "@ArcanumSec", tier: watched, kind: company, cats: [ai, bounty]}
+
+  # Red team and Active Directory
+  - {name: SpecterOps, handle: "@specterops", tier: core, kind: company, cats: [red]}
+  - {name: TrustedSec, handle: "@TrustedSec", tier: core, kind: company, cats: [red]}
+  - {name: Black Hills Information Security, handle: "@BlackHillsInformationSecurity", tier: core, kind: company, cats: [red, blue]}
+  - {name: Antisyphon Training, handle: "@AntisyphonTraining", tier: watched, kind: company, cats: [red, blue]}
+  - {name: Wild West Hackin' Fest, handle: "@WildWestHackinFest", tier: watched, kind: conference, cats: [red, blue]}
+  - {name: x33fcon, handle: "@x33fcon", tier: core, kind: conference, cats: [red]}
+  - {name: Red Team Village, handle: "@RedTeamVillage", tier: watched, kind: conference, cats: [red]}
+  - {name: conda, handle: "@c0nd4", tier: watched, kind: creator, cats: [red]}
+  - {name: 0xdf, handle: "@0xdf", tier: watched, kind: creator, cats: [ctf, red]}
+  - {name: TCM Security, handle: "@TCMSecurityAcademy", tier: watched, kind: company, cats: [red, basics]}
+  - {name: HackerSploit, handle: "@HackerSploit", tier: watched, kind: creator, cats: [red, basics]}
+
+  # Cloud
+  - {name: fwd:cloudsec, handle: "@fwdcloudsec", tier: core, kind: conference, cats: [cloud]}
+  - {name: Cloud Security Podcast, handle: "@CloudSecurityPodcast", tier: watched, kind: podcast, cats: [cloud]}
+  - {name: Wiz, handle: "@wiz_io", tier: watched, kind: company, cats: [cloud]}
+  - {name: CNCF, handle: "@cncf", tier: broad, kind: conference, cats: [cloud]}
+  - {name: AWS Events, handle: "@AWSEventsChannel", tier: broad, kind: conference, cats: [cloud]}
+
+  # Exploitation, reverse engineering and malware
+  - {name: LiveOverflow, id: UClcE-kVhqyiHCcjYwcpfj9w, handle: "@LiveOverflow", tier: core, kind: creator, cats: [exploit, ctf, basics]}
+  - {name: pwn.college, handle: "@pwncollege", tier: core, kind: university, cats: [exploit]}
+  - {name: OpenSecurityTraining2, handle: "@OpenSecurityTraining2", tier: core, kind: university, cats: [exploit, hardware]}
+  - {name: OALabs, handle: "@OALABS", tier: core, kind: creator, cats: [exploit]}
+  - {name: MalwareTech, handle: "@MalwareTechBlog", tier: core, kind: creator, cats: [exploit]}
+  - {name: Gynvael Coldwind, handle: "@GynvaelEN", tier: core, kind: creator, cats: [exploit, ctf]}
+  - {name: Off By One Security, handle: "@OffByOneSecurity", tier: core, kind: creator, cats: [exploit]}
+  - {name: OffensiveCon, handle: "@OffensiveCon", tier: core, kind: conference, cats: [exploit]}
+  - {name: Dr Josh Stroschein, handle: "@jstrosch", tier: watched, kind: creator, cats: [exploit]}
+  - {name: MalwareAnalysisForHedgehogs, handle: "@MalwareAnalysisForHedgehogs", tier: watched, kind: creator, cats: [exploit]}
+  - {name: Low Level, handle: "@LowLevelTV", tier: watched, kind: creator, cats: [exploit, basics]}
+  - {name: John Hammond, handle: "@_JohnHammond", tier: watched, kind: creator, cats: [exploit, ctf]}
+
+  # Blue team and DFIR
+  - {name: 13Cubed, handle: "@13Cubed", tier: core, kind: creator, cats: [blue]}
+  - {name: SANS Digital Forensics and Incident Response, handle: "@SANSForensics", tier: core, kind: company, cats: [blue]}
+  - {name: SANS Institute, handle: "@SANSInstitute", tier: watched, kind: company, cats: [blue, red]}
+  - {name: Chris Greer, handle: "@ChrisGreer", tier: core, kind: creator, cats: [blue, basics]}
+  - {name: Simply Cyber, handle: "@SimplyCyber", tier: watched, kind: creator, cats: [blue, basics]}
+
+  # Cryptography
+  - {name: Introduction to Cryptography by Christof Paar, handle: "@introductiontocryptography4223", tier: core, kind: university, cats: [crypto]}
+  - {name: IACR, handle: "@TheIACR", tier: core, kind: conference, cats: [crypto]}
+  - {name: Bill Buchanan OBE, handle: "@billbuchanan", tier: watched, kind: university, cats: [crypto]}
+
+  # Hardware and IoT
+  - {name: stacksmashing, handle: "@stacksmashing", tier: core, kind: creator, cats: [hardware, exploit]}
+  - {name: Joe Grand, handle: "@JoeGrand", tier: core, kind: creator, cats: [hardware]}
+  - {name: Matt Brown, handle: "@mattbrwn", tier: core, kind: creator, cats: [hardware]}
+  - {name: Hardwear.io, handle: "@hardwear_io", tier: watched, kind: conference, cats: [hardware]}
+  - {name: Hak5, handle: "@hak5", tier: broad, kind: creator, cats: [hardware, red]}
+
+  # CTF
+  - {name: IppSec, handle: "@ippsec", tier: core, kind: creator, cats: [ctf, red]}
+  - {name: Hack The Box, handle: "@HackTheBox", tier: watched, kind: company, cats: [ctf]}
+  - {name: TryHackMe, handle: "@TryHackMe", tier: watched, kind: company, cats: [ctf, basics]}
+
+  # Fundamentals
+  - {name: Computerphile, handle: "@Computerphile", tier: core, kind: university, cats: [basics, crypto]}
+  - {name: Hussein Nasser, handle: "@hnasr", tier: core, kind: creator, cats: [basics]}
+  - {name: Practical Networking, handle: "@PracticalNetworking", tier: core, kind: creator, cats: [basics]}
+  - {name: Ben Eater, handle: "@BenEater", tier: watched, kind: creator, cats: [basics]}
+  - {name: NetworkChuck, handle: "@NetworkChuck", tier: broad, kind: creator, cats: [basics]}
+  - {name: David Bombal, handle: "@davidbombal", tier: broad, kind: creator, cats: [basics, red]}
+  - {name: Professor Messer, handle: "@professormesser", tier: broad, kind: creator, cats: [basics]}
+  - {name: CS50, handle: "@cs50", tier: broad, kind: university, cats: [basics]}
+
+  # Universities and long courses
+  - {name: MIT OpenCourseWare, handle: "@mitocw", tier: broad, kind: university, cats: [basics, crypto, exploit]}
+  - {name: Stanford Online, handle: "@stanfordonline", tier: broad, kind: university, cats: [basics, bounty]}
+
+  # Conferences
+  - {name: DEFCONConference, handle: "@DEFCONConference", tier: core, kind: conference, cats: [bounty, red, exploit, hardware, ai]}
+  - {name: Black Hat, handle: "@BlackHatOfficialYT", tier: core, kind: conference, cats: [bounty, red, exploit, cloud]}
+  - {name: media.ccc.de, handle: "@mediacccde", tier: watched, kind: conference, cats: [exploit, hardware, crypto]}
+  - {name: Microsoft Security Response Center (MSRC), handle: "@MSFTSecResponse", tier: core, kind: conference, cats: [exploit, ai, cloud]}
+  - {name: OWASP Foundation, handle: "@OWASPGLOBAL", tier: watched, kind: conference, cats: [bounty]}
+  - {name: SEC-T, handle: "@SECTSE", tier: watched, kind: conference, cats: [exploit, bounty]}
+  - {name: Cyber Saiyan, handle: "@cybersaiyan", tier: watched, kind: conference, cats: [bounty, exploit]}
+  - {name: Hack In The Box, handle: "@hitbsecconf", tier: watched, kind: conference, cats: [exploit, red]}
+  - {name: BSidesSF, handle: "@BSidesSF", tier: watched, kind: conference, cats: [bounty, cloud, blue]}
+  - {name: BSides Las Vegas, handle: "@BSidesLV", tier: watched, kind: conference, cats: [red, blue]}
+  - {name: nullcon, handle: "@nullcon", tier: watched, kind: conference, cats: [exploit, bounty]}
+  - {name: Insomni'hack, handle: "@insomnihack", tier: watched, kind: conference, cats: [exploit]}
+  - {name: Ekoparty, handle: "@ekoparty", tier: watched, kind: conference, cats: [exploit]}
+  - {name: USENIX, handle: "@USENIXAssociation", tier: broad, kind: conference, cats: [exploit, crypto]}
+  - {name: RSA Conference, handle: "@RSAConference", tier: broad, kind: conference, cats: [blue, ai]}
+
+  # Podcasts and stories
+  - {name: Darknet Diaries, handle: "@JackRhysider", tier: watched, kind: podcast, cats: [red]}
+
+  # Mobile and CTF specialists
+  - {name: Laurie Wired, handle: "@lauriewired", tier: watched, kind: creator, cats: [exploit, bounty]}
+  - {name: CryptoCat, handle: "@_CryptoCat", tier: watched, kind: creator, cats: [ctf, exploit]}
+  - {name: PentesterLab, handle: "@PentesterLab", tier: watched, kind: company, cats: [bounty]}
+  - {name: 8kSec Academy, handle: "@8kSecAcademy", tier: watched, kind: company, cats: [bounty, exploit]}
+  - {name: Mobile Hacking Lab, handle: "@MobileHackingLab", tier: watched, kind: company, cats: [bounty]}

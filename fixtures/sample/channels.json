@@ -1,0 +1,154 @@
+[
+ {
+  "id": "UCsample-bbvdefcon",
+  "title": "Bug Bounty DEFCON",
+  "tier": "core",
+  "kind": "conference",
+  "cats": [
+   "bounty",
+   "ai"
+  ],
+  "subscribers": 90000
+ },
+ {
+  "id": "UCsample-sect",
+  "title": "SEC-T",
+  "tier": "watched",
+  "kind": "conference",
+  "cats": [
+   "exploit",
+   "bounty"
+  ],
+  "subscribers": 12000
+ },
+ {
+  "id": "UCsample-blackhat",
+  "title": "Black Hat",
+  "tier": "core",
+  "kind": "conference",
+  "cats": [
+   "bounty",
+   "red",
+   "exploit"
+  ],
+  "subscribers": 300000
+ },
+ {
+  "id": "UCCZDt7MuC3Hzs6IH4xODLBw",
+  "title": "NahamSec",
+  "tier": "core",
+  "kind": "creator",
+  "cats": [
+   "bounty"
+  ],
+  "subscribers": 250000
+ },
+ {
+  "id": "UCsample-msrc",
+  "title": "Microsoft Security Response Center (MSRC)",
+  "tier": "core",
+  "kind": "conference",
+  "cats": [
+   "exploit",
+   "ai"
+  ],
+  "subscribers": 20000
+ },
+ {
+  "id": "UCsample-pwnfunction",
+  "title": "PwnFunction",
+  "tier": "core",
+  "kind": "creator",
+  "cats": [
+   "bounty",
+   "basics"
+  ],
+  "subscribers": 200000
+ },
+ {
+  "id": "UCsample-ccc",
+  "title": "media.ccc.de",
+  "tier": "watched",
+  "kind": "conference",
+  "cats": [
+   "exploit",
+   "hardware"
+  ],
+  "subscribers": 180000
+ },
+ {
+  "id": "UCsample-defcon",
+  "title": "DEFCONConference",
+  "tier": "core",
+  "kind": "conference",
+  "cats": [
+   "bounty",
+   "red"
+  ],
+  "subscribers": 500000
+ },
+ {
+  "id": "UCsample-owasplondon",
+  "title": "OWASP London",
+  "tier": "watched",
+  "kind": "conference",
+  "cats": [
+   "bounty"
+  ],
+  "subscribers": 8000
+ },
+ {
+  "id": "UClcE-kVhqyiHCcjYwcpfj9w",
+  "title": "LiveOverflow",
+  "tier": "core",
+  "kind": "creator",
+  "cats": [
+   "exploit",
+   "ctf",
+   "basics"
+  ],
+  "subscribers": 900000
+ },
+ {
+  "id": "UCsample-insiderphd",
+  "title": "InsiderPhD",
+  "tier": "core",
+  "kind": "creator",
+  "cats": [
+   "bounty"
+  ],
+  "subscribers": 80000
+ },
+ {
+  "id": "UCsample-ippsec",
+  "title": "IppSec",
+  "tier": "core",
+  "kind": "creator",
+  "cats": [
+   "ctf",
+   "red"
+  ],
+  "subscribers": 300000
+ },
+ {
+  "id": "UCsample-stok",
+  "title": "STÖK",
+  "tier": "core",
+  "kind": "creator",
+  "cats": [
+   "bounty"
+  ],
+  "subscribers": 150000
+ },
+ {
+  "id": "UCsample-computerphile",
+  "title": "Computerphile",
+  "tier": "core",
+  "kind": "university",
+  "cats": [
+   "basics",
+   "crypto"
+  ],
+  "subscribers": 2400000
+ }
+]
