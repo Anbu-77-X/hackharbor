@@ -1010,7 +1010,9 @@
     let player;
     if (CFG.embed) {
       player = h("div", { class: "player" }, h("iframe", {
-        src: "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(v.id) + "?autoplay=1&rel=0&playsinline=1",
+        // enablejsapi lets the page tell the player to start (used by Full screen); origin pins
+        // those messages to this site.
+        src: "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(v.id) + "?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=" + encodeURIComponent(location.origin),
         title: v.title,
         allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen",
         allowfullscreen: true, referrerpolicy: "strict-origin-when-cross-origin"
@@ -1046,7 +1048,11 @@
     // Our own full-screen button: some browsers (TVs, iPhones) won't let YouTube's player go full
     // screen from inside the page, but they will for the page's own player box. Where even that
     // isn't available, the player fills the window instead, with a button to come back.
-    const fullBtn = actButton("expand", "Full screen", null, function () { enterFull(player); });
+    // Full screen also starts the video if it isn't playing yet.
+    const fullBtn = actButton("expand", "Full screen", null, function () {
+      enterFull(player);
+      playIn(player.querySelector("iframe"));
+    });
     const saveBtn = actButton("save", "Save", null, function () {
       if (saveBox) { saveBox.remove(); saveBox = null; saveBtn.setAttribute("aria-expanded", "false"); return; }
       saveBox = savePanel(v);
@@ -1128,6 +1134,12 @@
   }
   function refresh() { history.replaceState(null, "", hashFor()); render(); }
   window.addEventListener("popstate", function () { readHash(); closeDrawer(); render(); });
+  function playIn(frame) {
+    if (!frame || !frame.contentWindow) return;
+    try {
+      frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: "playVideo", args: [] }), "https://www.youtube-nocookie.com");
+    } catch (e) { /* the player isn't ready yet; YouTube's own play button still works */ }
+  }
   function enterFull(el) {
     const req = el.requestFullscreen || el.webkitRequestFullscreen || el.webkitEnterFullscreen;
     if (req) {
