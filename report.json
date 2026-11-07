@@ -1,0 +1,161 @@
+{
+  "started": "2026-11-07T18:01:54Z",
+  "stages": {
+    "migrate": {
+      "ok": true,
+      "seconds": 0.0
+    },
+    "seeds": {
+      "ok": true,
+      "seconds": 0.1
+    },
+    "poll": {
+      "ok": true,
+      "seconds": 0.8,
+      "checked": 50,
+      "failed": 0,
+      "new_videos": 35
+    },
+    "community": {
+      "ok": true,
+      "seconds": 56.9,
+      "mentions": 45,
+      "new_videos": 3
+    },
+    "search": {
+      "ok": true,
+      "seconds": 0.2,
+      "searches": 1,
+      "new_videos": 4
+    },
+    "hydrate": {
+      "ok": true,
+      "seconds": 0.2,
+      "hydrated": 64
+    },
+    "judge": {
+      "ok": false,
+      "error": "ValueError: Invalid IPv6 URL"
+    },
+    "refresh": {
+      "ok": false,
+      "error": "ValueError: Invalid IPv6 URL"
+    },
+    "discover": {
+      "ok": true,
+      "seconds": 2.8,
+      "evaluated": 2,
+      "videos_from_new_channels": 31
+    },
+    "backfill": {
+      "ok": true,
+      "seconds": 21.4,
+      "queued_from_archives": 440
+    },
+    "playlists": {
+      "ok": true,
+      "seconds": 0.0,
+      "channels": 0,
+      "playlists": 0,
+      "new_videos": 0,
+      "requeued": 0
+    },
+    "hydrate_more": {
+      "ok": true,
+      "seconds": 0.1,
+      "hydrated": 47
+    },
+    "judge_more": {
+      "ok": false,
+      "error": "ValueError: Invalid IPv6 URL"
+    },
+    "forget": {
+      "ok": true,
+      "seconds": 0.0,
+      "forgotten": 0
+    },
+    "publish": {
+      "ok": true,
+      "seconds": 33.5,
+      "generated": "2026-11-07T18:06:34Z",
+      "videos": 15500,
+      "by_category": {
+        "bounty": 3801,
+        "ai": 1333,
+        "red": 2713,
+        "cloud": 1615,
+        "exploit": 3101,
+        "blue": 3531,
+        "crypto": 1697,
+        "hardware": 951,
+        "ctf": 2819,
+        "basics": 2922
+      },
+      "channels_watched": 286
+    }
+  },
+  "sources": {
+    "channels": "50/50 feeds read",
+    "hacker_news": "ok (8)",
+    "lobsters": "ok (27)",
+    "reddit": "ok (1)",
+    "mastodon": "ok (9)",
+    "hn_backfill": "2022-03 (1286), 28 about security"
+  },
+  "seeds_unresolved": [
+    "Arcanum Information Security",
+    "OpenSecurityTraining2",
+    "Hardwear.io",
+    "SEC-T",
+    "BSides Las Vegas",
+    "Insomni'hack",
+    "Ekoparty",
+    "USENIX",
+    "RSA Conference",
+    "8kSec Academy"
+  ],
+  "rss_ok_share": 1.0,
+  "channels_evaluated": [
+    "Contra Average: watched (91% on topic)",
+    "Kong: watched (58% on topic)"
+  ],
+  "featured_candidates": 0,
+  "channel_changes": [],
+  "published": {
+    "generated": "2026-11-07T18:06:34Z",
+    "videos": 15500,
+    "by_category": {
+      "bounty": 3801,
+      "ai": 1333,
+      "red": 2713,
+      "cloud": 1615,
+      "exploit": 3101,
+      "blue": 3531,
+      "crypto": 1697,
+      "hardware": 951,
+      "ctf": 2819,
+      "basics": 2922
+    },
+    "channels_watched": 286
+  },
+  "quota": {
+    "day": "2026-11-07",
+    "units": 511,
+    "searches": 1,
+    "exhausted": false
+  },
+  "judge_calls": 0,
+  "finished": "2026-11-07T18:07:04Z",
+  "totals": {
+    "published": 15500,
+    "rejected": 85522,
+    "maturing": 99,
+    "review": 78,
+    "hydrated": 8916,
+    "new": 0
+  },
+  "health": {
+    "bad_run": false,
+    "bad_runs_in_a_row": 0
+  }
+}
