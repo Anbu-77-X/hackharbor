@@ -80,6 +80,16 @@ def test_reading_links():
     assert kinds == {"Slides", "Code"}
 
 
+def test_reading_links_skips_links_that_dont_parse():
+    # Real descriptions write links like this to dodge auto-linking; urlparse rejects them, and
+    # one such video used to stop the whole judge stage on every run.
+    desc = ("Website: https://www[dot]example[dot]com\nCert: https://pauljerimy[dot]com/x\n"
+            "Notes: https://www[.]example.org\nCode: https://github.com/a/b")
+    links = signals.reading_links(desc)
+    assert [l["url"] for l in links] == ["https://github.com/a/b"]
+    assert links[0]["title"] == "a/b"
+
+
 def test_home_feed_rules():
     vids = []
     for i in range(60):
