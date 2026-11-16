@@ -37,10 +37,34 @@ jobs:
 
       - name: Restore memory
         run: |
+          set -o pipefail
           mkdir -p state
-          if git fetch --depth=1 origin state 2>/dev/null; then
-            git archive FETCH_HEAD | tar -x -C state
-            if [ -f state/harbor.db.gz ]; then gunzip -f state/harbor.db.gz; fi
+          # "Nothing saved yet" (the very first run) and "couldn't reach it" are told apart: starting
+          # from an empty memory after a network blip would overwrite everything at the end of the run.
+          if git ls-remote --exit-code --heads origin state > /dev/null; then :; else
+            rc=$?
+            if [ "$rc" -eq 2 ]; then echo "No saved memory yet, so this run starts fresh."; exit 0; fi
+            echo "::error::Couldn't reach the saved memory (git ls-remote exit $rc), so this run stops here."
+            exit 1
+          fi
+          git fetch -q --depth=1 origin state
+          git archive FETCH_HEAD | tar -x -C state
+          cd state
+          # The memory is saved in parts, so no file nears GitHub's 100 MB limit. Saves from before
+          # that are a single harbor.db.gz, which is read as it is.
+          if [ -f harbor.db.gz.sha256 ]; then
+            cat harbor.db.gz.part-* > harbor.db.gz
+            if ! sha256sum --quiet -c harbor.db.gz.sha256; then
+              echo "::error::The saved memory's parts don't add up, so this run won't start from a damaged copy."
+              rm -f harbor.db.gz
+              exit 1
+            fi
+            rm -f harbor.db.gz.part-* harbor.db.gz.sha256
+          fi
+          if [ -f harbor.db.gz ]; then gunzip -f harbor.db.gz; fi
+          if [ ! -f harbor.db ]; then
+            echo "::error::The state branch has no memory in it, so this run stops rather than start over."
+            exit 1
           fi
 
       - name: Find, judge and publish videos
@@ -64,9 +88,14 @@ jobs:
         run: |
           [ -f state/harbor.db ] || exit 0
           mkdir -p _state
-          gzip -9 -c state/harbor.db > _state/harbor.db.gz
-          [ -f state/report.json ] && cp state/report.json _state/
           cd _state
+          gzip -9 -c ../state/harbor.db > harbor.db.gz
+          # GitHub warns about files over 50 MB and refuses them over 100 MB, so the memory is saved
+          # in 40 MB parts with a checksum; Restore memory joins them and checks the result.
+          sha256sum harbor.db.gz > harbor.db.gz.sha256
+          split -b 40M -d -a 3 harbor.db.gz harbor.db.gz.part-
+          rm harbor.db.gz
+          if [ -f ../state/report.json ]; then cp ../state/report.json .; fi
           git init -q -b state
           git config user.name "hackharbor-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 import re
-from urllib.parse import urlparse
+from urllib.parse import ParseResult, urlparse
 
 from .classify import chapter_count
 from .util import clamp, sigmoid
@@ -227,11 +227,10 @@ GENERIC_LABELS = {"research", "slides", "slide", "deck", "code", "source", "sour
                   "documentation", "read more", "article", "pdf", "tool", "tools", "report", "references", "reference"}
 
 
-def _title_from(url: str, label: str, kind: str) -> str:
+def _title_from(p: ParseResult, label: str, kind: str) -> str:
     label = re.sub(r"[\s:–—|>\-•*]+$", "", label.strip()).strip(" -•*:")
     if 3 <= len(label) <= 90 and not label.lower().startswith(("http", "www")) and label.lower() not in GENERIC_LABELS:
         return label
-    p = urlparse(url)
     parts = [x for x in p.path.split("/") if x]
     if p.netloc.endswith("github.com") and len(parts) >= 2:
         return f"{parts[0]}/{parts[1]}"
@@ -251,14 +250,18 @@ def reading_links(description: str | None, limit: int = 4) -> list[dict]:
             url = url.rstrip(".,;")
             if LINK_SKIP.search(url) or url in seen:
                 continue
-            host = urlparse(url).netloc.lower().removeprefix("www.")
-            path = urlparse(url).path
+            try:
+                p = urlparse(url)
+            except ValueError:
+                # Not a real link, e.g. "https://www[dot]example[dot]com" written to dodge auto-linking.
+                continue
+            host = p.netloc.lower().removeprefix("www.")
             for rx, kind_of in LINK_TYPES:
                 if rx.search(host):
-                    kind = kind_of(path)
+                    kind = kind_of(p.path)
                     if kind:
                         seen.add(url)
-                        out.append({"type": kind, "title": _title_from(url, label, kind), "url": url})
+                        out.append({"type": kind, "title": _title_from(p, label, kind), "url": url})
                     break
             if len(out) >= limit:
                 return out
