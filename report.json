@@ -1,0 +1,178 @@
+{
+  "started": "2026-11-28T14:33:51Z",
+  "stages": {
+    "migrate": {
+      "ok": true,
+      "seconds": 0.0
+    },
+    "seeds": {
+      "ok": true,
+      "seconds": 1.4
+    },
+    "poll": {
+      "ok": true,
+      "seconds": 5.0,
+      "checked": 313,
+      "failed": 0,
+      "new_videos": 98
+    },
+    "community": {
+      "ok": true,
+      "seconds": 21.2,
+      "mentions": 40,
+      "new_videos": 7
+    },
+    "search": {
+      "ok": true,
+      "seconds": 0.4,
+      "searches": 1,
+      "new_videos": 5
+    },
+    "hydrate": {
+      "ok": true,
+      "seconds": 0.5,
+      "hydrated": 131
+    },
+    "judge": {
+      "ok": true,
+      "seconds": 3.5,
+      "rejected": 111,
+      "waiting": 18,
+      "published": 2,
+      "review": 0,
+      "deferred": 0,
+      "judged_by_ai": 0
+    },
+    "refresh": {
+      "ok": true,
+      "seconds": 2.8,
+      "refreshed": 52,
+      "removed": 2,
+      "after_rejected": 0,
+      "after_waiting": 0,
+      "after_published": 52,
+      "after_review": 0,
+      "after_deferred": 0,
+      "after_judged_by_ai": 0
+    },
+    "discover": {
+      "ok": true,
+      "seconds": 2.2,
+      "evaluated": 2,
+      "videos_from_new_channels": 12
+    },
+    "backfill": {
+      "ok": true,
+      "seconds": 8.4,
+      "queued_from_archives": 202
+    },
+    "playlists": {
+      "ok": true,
+      "seconds": 0.0,
+      "channels": 0,
+      "playlists": 0,
+      "new_videos": 0,
+      "requeued": 0
+    },
+    "hydrate_more": {
+      "ok": true,
+      "seconds": 0.2,
+      "hydrated": 34
+    },
+    "judge_more": {
+      "ok": true,
+      "seconds": 15.7,
+      "rejected": 185,
+      "waiting": 0,
+      "published": 51,
+      "review": 0,
+      "deferred": 0,
+      "judged_by_ai": 0
+    },
+    "forget": {
+      "ok": true,
+      "seconds": 0.1,
+      "forgotten": 1
+    },
+    "publish": {
+      "ok": true,
+      "seconds": 75.9,
+      "generated": "2026-11-28T14:34:56Z",
+      "videos": 33916,
+      "by_category": {
+        "bounty": 9055,
+        "ai": 3904,
+        "red": 6459,
+        "cloud": 4073,
+        "exploit": 6069,
+        "blue": 7257,
+        "crypto": 2755,
+        "hardware": 1862,
+        "ctf": 6469,
+        "basics": 8071
+      },
+      "channels_watched": 769
+    }
+  },
+  "sources": {
+    "channels": "313/313 feeds read",
+    "hacker_news": "ok (10)",
+    "lobsters": "ok (25)",
+    "reddit": "failed: reddit is refusing requests from this runner",
+    "mastodon": "ok (5)",
+    "hn_backfill": "2010-11 (460), 27 about security"
+  },
+  "seeds_unresolved": [
+    "Arcanum Information Security",
+    "BSides Las Vegas",
+    "Insomni'hack",
+    "Ekoparty",
+    "USENIX",
+    "RSA Conference",
+    "8kSec Academy"
+  ],
+  "rss_ok_share": 1.0,
+  "channels_evaluated": [
+    "Exploit2Protect: watched (95% on topic)",
+    "Cyber Phantoms: watched (100% on topic)"
+  ],
+  "featured_candidates": 0,
+  "channel_changes": [],
+  "published": {
+    "generated": "2026-11-28T14:34:56Z",
+    "videos": 33916,
+    "by_category": {
+      "bounty": 9055,
+      "ai": 3904,
+      "red": 6459,
+      "cloud": 4073,
+      "exploit": 6069,
+      "blue": 7257,
+      "crypto": 2755,
+      "hardware": 1862,
+      "ctf": 6469,
+      "basics": 8071
+    },
+    "channels_watched": 769
+  },
+  "quota": {
+    "day": "2026-11-28",
+    "units": 202,
+    "searches": 1,
+    "exhausted": false
+  },
+  "judge_calls": 0,
+  "finished": "2026-11-28T14:36:08Z",
+  "totals": {
+    "published": 33916,
+    "rejected": 245725,
+    "maturing": 258,
+    "review": 268,
+    "hydrated": 0,
+    "new": 0
+  },
+  "health": {
+    "bad_run": false,
+    "bad_runs_in_a_row": 0
+  }
+}
